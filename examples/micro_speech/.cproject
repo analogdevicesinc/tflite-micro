@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="xtensa.sharcfx.toolchain.target.exe.debug.1864430364">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="xtensa.sharcfx.toolchain.target.exe.debug.1864430364" moduleId="org.eclipse.cdt.core.settings" name="Debug">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="com.analog.crosscore.managedbuilder.core.errorparser.xtensa" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="clean" description="" id="xtensa.sharcfx.toolchain.target.exe.debug.1864430364" name="Debug" parent="xtensa.sharcfx.toolchain.target.exe.debug" prebuildStep="copy /b ..\src\main.cc+,, ..\src\main.cc">
+					<folderInfo id="xtensa.sharcfx.toolchain.target.exe.debug.1864430364." name="/" resourcePath="">
+						<toolChain id="xtensa.sharcfx.toolchain.exe.debug.995587203" name="CrossCore Xtensa SHARC-FX Toolchain" superClass="xtensa.sharcfx.toolchain" targetTool="xtensa.sharcfx.toolchain.c.linker;xtensa.sharcfx.toolchain.cpp.linker">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="xtensa.common.toolchain.platform.base.207822218" name="Development Platform" osList="all" superClass="xtensa.common.toolchain.platform.base"/>
+							<builder buildPath="${workspace_loc:/micro_speech}/Debug" id="xtensa.sharcfx.toolchain.builder.596540732" keepEnvironmentInBuildfile="false" name="CrossCore SHARC-FX Builder" superClass="xtensa.sharcfx.toolchain.builder"/>
+							<tool id="xtensa.common.toolchain.common.2043575501" superClass="xtensa.common.toolchain.common">
+								<option id="xtensa.common.option.proc.175501178" name="-proc" superClass="xtensa.common.option.proc" useByScannerDiscovery="false" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.common.option.sirevision.1306649907" name="-si-revision" superClass="xtensa.common.option.sirevision" useByScannerDiscovery="false" value=" any" valueType="string"/>
+								<option id="xtensa.common.option.coreid.1919916970" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="xtensa.common.option.coreid" useByScannerDiscovery="false" value="1" valueType="string"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.assembler.668070525" name="CrossCore SHARC-FX Assembler" superClass="xtensa.sharcfx.toolchain.assembler">
+								<option defaultValue="true" id="xtensa.base.assembler.option.debug.enable.1804210437" name="Enable debug information" superClass="xtensa.base.assembler.option.debug.enable" useByScannerDiscovery="false" valueType="boolean"/>
+								<option defaultValue="xtensa.sharcfx.assembler.option.dwarfversion.enumerated.v2" id="xtensa.sharcfx.assembler.option.dwarfversion.1818925858" name="Debug information format (-gdwarf)" superClass="xtensa.sharcfx.assembler.option.dwarfversion" useByScannerDiscovery="false" valueType="enumerated"/>
+								<option id="xtensa.common.option.proc.1476736121" name="-proc" superClass="xtensa.common.option.proc" useByScannerDiscovery="false" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.common.option.sirevision.1725222470" name="-si-revision" superClass="xtensa.common.option.sirevision" useByScannerDiscovery="false" value=" any" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.assembler.option.preprocessdefs.172977872" name="Preprocessor definitions (-D):" superClass="xtensa.base.assembler.option.preprocessdefs" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="CORE1"/>
+									<listOptionValue builtIn="false" value="_DEBUG"/>
+								</option>
+								<option id="xtensa.common.option.coreid.1087392099" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="xtensa.common.option.coreid" useByScannerDiscovery="false" value="1" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.assembler.option.additionaldirectories.1622335895" name="Additional include directories (-I):" superClass="xtensa.base.assembler.option.additionaldirectories" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/system}&quot;"/>
+								</option>
+								<inputType id="xtensa.sharcfx.assembler.inputType.457628059" name="Assembly Source" superClass="xtensa.sharcfx.assembler.inputType"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.c.compiler.765990031" name="CrossCore SHARC-FX C Compiler" superClass="xtensa.sharcfx.toolchain.c.compiler">
+								<option defaultValue="false" id="xtensa.base.compiler.option.optimization.enable.1106252646" name="Enable optimization" superClass="xtensa.base.compiler.option.optimization.enable" useByScannerDiscovery="false" valueType="boolean"/>
+								<option defaultValue="true" id="xtensa.base.compiler.option.debug.enable.1353672669" name="Enable debug information" superClass="xtensa.base.compiler.option.debug.enable" useByScannerDiscovery="false" valueType="boolean"/>
+								<option defaultValue="xtensa.base.compiler.option.debug.g" id="xtensa.base.compiler.option.debug.1548800919" name="Debug information level" superClass="xtensa.base.compiler.option.debug" useByScannerDiscovery="false" valueType="enumerated"/>
+								<option id="xtensa.common.option.proc.202523979" name="-proc" superClass="xtensa.common.option.proc" useByScannerDiscovery="false" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.common.option.sirevision.1719814535" name="-si-revision" superClass="xtensa.common.option.sirevision" useByScannerDiscovery="false" value=" any" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.preprocessdefs.1795431345" name="Preprocessor definitions (-D):" superClass="xtensa.base.compiler.option.preprocessdefs" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="CORE1"/>
+									<listOptionValue builtIn="false" value="_DEBUG"/>
+								</option>
+								<option id="xtensa.common.option.coreid.827963628" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="xtensa.common.option.coreid" useByScannerDiscovery="false" value="1" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.additionaldirectories.162524541" name="Additional include directories (-I):" superClass="xtensa.base.compiler.option.additionaldirectories" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/system}&quot;"/>
+									<listOptionValue builtIn="false" value="../src/"/>
+									<listOptionValue builtIn="false" value="../../../TFLM/src/"/>
+									<listOptionValue builtIn="false" value="../../../TFLM/src/third_party/gemmlowp/"/>
+									<listOptionValue builtIn="false" value="../../../TFLM/src/third_party/flatbuffers/include/"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.additionaloptions.1985773082" name="Additional options:" superClass="xtensa.base.compiler.option.additionaloptions" useByScannerDiscovery="false" valueType="stringList">
+									<listOptionValue builtIn="false" value="-std=c11"/>
+								</option>
+								<inputType id="xtensa.sharcfx.c.compiler.inputType.1941195258" name="C Source" superClass="xtensa.sharcfx.c.compiler.inputType"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.c.linker.1587422858" name="CrossCore SHARC-FX C Linker" superClass="xtensa.sharcfx.toolchain.c.linker">
+								<option id="xtensa.common.option.proc.481398709" name="-proc" superClass="xtensa.common.option.proc" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.common.option.sirevision.457986160" name="-si-revision" superClass="xtensa.common.option.sirevision" value=" any" valueType="string"/>
+								<option id="xtensa.common.option.coreid.284083064" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="xtensa.common.option.coreid" value="1" valueType="string"/>
+								<inputType id="xtensa.base.linker.input.1942722141" superClass="xtensa.base.linker.input">
+									<additionalInput kind="additionaldependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionaldependency" paths="$(LSP_SRCS)"/>
+								</inputType>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.archiver.696007350" name="CrossCore SHARC-FX Archiver" superClass="xtensa.sharcfx.toolchain.archiver"/>
+							<tool id="xtensa.sharcfx.toolchain.loader.900154418" name="CrossCore SHARC-FX Loader" superClass="xtensa.sharcfx.toolchain.loader">
+								<option id="xtensa.loader.option.proc.2054125626" name="-proc" superClass="xtensa.loader.option.proc" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.loader.option.sirevision.521959441" name="-si-revision" superClass="xtensa.loader.option.sirevision" value=" any" valueType="string"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.cpp.compiler.1796528406" name="CrossCore SHARC-FX C++ Compiler" superClass="xtensa.sharcfx.toolchain.cpp.compiler">
+								<option defaultValue="false" id="xtensa.base.compiler.option.optimization.enable.1584762357" name="Enable optimization" superClass="xtensa.base.compiler.option.optimization.enable" useByScannerDiscovery="false" valueType="boolean"/>
+								<option defaultValue="true" id="xtensa.base.compiler.option.debug.enable.848527502" name="Enable debug information" superClass="xtensa.base.compiler.option.debug.enable" useByScannerDiscovery="false" valueType="boolean"/>
+								<option defaultValue="xtensa.base.compiler.option.debug.g" id="xtensa.base.compiler.option.debug.544996863" name="Debug information level" superClass="xtensa.base.compiler.option.debug" useByScannerDiscovery="false" valueType="enumerated"/>
+								<option id="xtensa.common.option.proc.967418394" name="-proc" superClass="xtensa.common.option.proc" useByScannerDiscovery="false" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.common.option.sirevision.703665269" name="-si-revision" superClass="xtensa.common.option.sirevision" useByScannerDiscovery="false" value=" any" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.preprocessdefs.1310045378" name="Preprocessor definitions (-D):" superClass="xtensa.base.compiler.option.preprocessdefs" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="CORE1"/>
+									<listOptionValue builtIn="false" value="_DEBUG"/>
+								</option>
+								<option id="xtensa.common.option.coreid.1247654028" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="xtensa.common.option.coreid" useByScannerDiscovery="false" value="1" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.additionaldirectories.13482081" name="Additional include directories (-I):" superClass="xtensa.base.compiler.option.additionaldirectories" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/system}&quot;"/>
+									<listOptionValue builtIn="false" value="../src/"/>
+									<listOptionValue builtIn="false" value="../../../TFLM/src/"/>
+									<listOptionValue builtIn="false" value="../../../TFLM/src/third_party/gemmlowp/"/>
+									<listOptionValue builtIn="false" value="../../../TFLM/src/third_party/flatbuffers/include/"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.additionaloptions.1872723921" name="Additional options:" superClass="xtensa.base.compiler.option.additionaloptions" useByScannerDiscovery="false" valueType="stringList">
+									<listOptionValue builtIn="false" value="-std=c++11"/>
+									<listOptionValue builtIn="false" value="-stdlib=libc++"/>
+								</option>
+								<inputType id="xtensa.sharcfx.cpp.compiler.inputType.312494711" name="CPP Source" superClass="xtensa.sharcfx.cpp.compiler.inputType"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.cpp.linker.1762345672" name="CrossCore SHARC-FX C++ Linker" superClass="xtensa.sharcfx.toolchain.cpp.linker">
+								<option id="xtensa.common.option.proc.1989249910" name="-proc" superClass="xtensa.common.option.proc" useByScannerDiscovery="false" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.common.option.sirevision.872704948" name="-si-revision" superClass="xtensa.common.option.sirevision" useByScannerDiscovery="false" value=" any" valueType="string"/>
+								<option id="xtensa.common.option.coreid.679927153" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="xtensa.common.option.coreid" useByScannerDiscovery="false" value="1" valueType="string"/>
+								<option id="xtensa.base.linker.option.lsp.2009893826" name="Linker Support Package (LSP)" superClass="xtensa.base.linker.option.lsp" useByScannerDiscovery="false" value="xtensa.base.linker.option.lsp.enumerated.custom" valueType="enumerated"/>
+								<option id="xtensa.base.linker.option.lsp.custom.499263757" name="Custom LSP" superClass="xtensa.base.linker.option.lsp.custom" useByScannerDiscovery="false" value="&quot;${ProjDirPath}/system/startup_lsp/lsp&quot;" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.linker.option.additionaloptions.1801290186" name="Additional options:" superClass="xtensa.base.linker.option.additionaloptions" useByScannerDiscovery="false" valueType="stringList">
+									<listOptionValue builtIn="false" value="-lstdc++11"/>
+									<listOptionValue builtIn="false" value="-stdlib=libc++"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.linker.option.libraryPaths.2112572201" name="Library search directories (-L):" superClass="xtensa.base.linker.option.libraryPaths" useByScannerDiscovery="false" valueType="libPaths">
+									<listOptionValue builtIn="false" value="../../../TFLM/Lib"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.linker.option.libs.957397339" name="Additional libraries (-l):" superClass="xtensa.base.linker.option.libs" useByScannerDiscovery="false" valueType="libs">
+									<listOptionValue builtIn="false" value="TFLM"/>
+								</option>
+								<inputType id="xtensa.base.linker.input.2138928287" superClass="xtensa.base.linker.input">
+									<additionalInput kind="additionaldependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionaldependency" paths="$(LSP_SRCS)"/>
+								</inputType>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.deviceprogrammer.933431759" name="CrossCore SHARC-FX Device Programmer" superClass="xtensa.sharcfx.toolchain.deviceprogrammer">
+								<option id="deviceprogrammer.option.proc.361541469" name="-proc" superClass="deviceprogrammer.option.proc" value=" ADSP-SC835" valueType="string"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<folderInfo id="xtensa.sharcfx.toolchain.target.exe.debug.1864430364.system" name="system" resourcePath="system">
+						<toolChain id="xtensa.sharcfx.toolchain.1876775557" name="CrossCore Xtensa SHARC-FX Toolchain" superClass="xtensa.sharcfx.toolchain" unusedChildren="">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="xtensa.common.toolchain.platform.base" name="Development Platform" osList="all" superClass="xtensa.common.toolchain.platform.base"/>
+							<tool id="xtensa.common.toolchain.common.383273825" superClass="xtensa.common.toolchain.common.2043575501"/>
+							<tool id="xtensa.sharcfx.toolchain.assembler.1206180689" name="CrossCore SHARC-FX Assembler" superClass="xtensa.sharcfx.toolchain.assembler.668070525">
+								<inputType id="xtensa.sharcfx.assembler.inputType.1667057272" name="Assembly Source" superClass="xtensa.sharcfx.assembler.inputType"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.c.compiler.1559915665" name="CrossCore SHARC-FX C Compiler" superClass="xtensa.sharcfx.toolchain.c.compiler.765990031">
+								<inputType id="xtensa.sharcfx.c.compiler.inputType.2016055848" name="C Source" superClass="xtensa.sharcfx.c.compiler.inputType"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.c.linker.451293418" name="CrossCore SHARC-FX C Linker" superClass="xtensa.sharcfx.toolchain.c.linker.1587422858">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.linker.option.additionaloptions.758373142" name="Additional options:" superClass="xtensa.base.linker.option.additionaloptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-lstdc++11"/>
+									<listOptionValue builtIn="false" value="-stdlib=libc++"/>
+								</option>
+								<option id="xtensa.base.linker.option.lsp.1436860913" superClass="xtensa.base.linker.option.lsp" value="xtensa.base.linker.option.lsp.enumerated.custom" valueType="enumerated"/>
+								<option id="xtensa.base.linker.option.lsp.custom.412381308" superClass="xtensa.base.linker.option.lsp.custom" value="&quot;${ProjDirPath}/system/startup_lsp/lsp&quot;" valueType="string"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.archiver.1683906237" name="CrossCore SHARC-FX Archiver" superClass="xtensa.sharcfx.toolchain.archiver.696007350"/>
+							<tool id="xtensa.sharcfx.toolchain.loader.708751752" name="CrossCore SHARC-FX Loader" superClass="xtensa.sharcfx.toolchain.loader.900154418"/>
+							<tool id="xtensa.sharcfx.toolchain.cpp.compiler.1210458757" name="CrossCore SHARC-FX C++ Compiler" superClass="xtensa.sharcfx.toolchain.cpp.compiler.1796528406">
+								<inputType id="xtensa.sharcfx.cpp.compiler.inputType.1864808919" name="CPP Source" superClass="xtensa.sharcfx.cpp.compiler.inputType"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.cpp.linker.2067754939" name="CrossCore SHARC-FX C++ Linker" superClass="xtensa.sharcfx.toolchain.cpp.linker.1762345672"/>
+							<tool id="xtensa.sharcfx.toolchain.deviceprogrammer.1481335369" name="CrossCore SHARC-FX Device Programmer" superClass="xtensa.sharcfx.toolchain.deviceprogrammer">
+								<option id="deviceprogrammer.option.proc.1605113097" name="-proc" superClass="deviceprogrammer.option.proc" value=" ADSP-SC835" valueType="string"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="system|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="system"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+		<cconfiguration id="xtensa.sharcfx.toolchain.target.exe.release.856378625">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="xtensa.sharcfx.toolchain.target.exe.release.856378625" moduleId="org.eclipse.cdt.core.settings" name="Release">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="com.analog.crosscore.managedbuilder.core.errorparser.xtensa" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.release" cleanCommand="clean" description="" id="xtensa.sharcfx.toolchain.target.exe.release.856378625" name="Release" parent="xtensa.sharcfx.toolchain.target.exe.release" prebuildStep="copy /b ..\src\main.cc+,, ..\src\main.cc">
+					<folderInfo id="xtensa.sharcfx.toolchain.target.exe.release.856378625." name="/" resourcePath="">
+						<toolChain id="xtensa.sharcfx.toolchain.exe.release.152668744" name="CrossCore Xtensa SHARC-FX Toolchain" superClass="xtensa.sharcfx.toolchain" targetTool="xtensa.sharcfx.toolchain.c.linker;xtensa.sharcfx.toolchain.cpp.linker">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="xtensa.common.toolchain.platform.base.1631245145" name="Development Platform" osList="all" superClass="xtensa.common.toolchain.platform.base"/>
+							<builder buildPath="${workspace_loc:/micro_speech}/Release" id="xtensa.sharcfx.toolchain.builder.393210456" keepEnvironmentInBuildfile="false" name="CrossCore SHARC-FX Builder" superClass="xtensa.sharcfx.toolchain.builder"/>
+							<tool id="xtensa.common.toolchain.common.1521496905" superClass="xtensa.common.toolchain.common">
+								<option id="xtensa.common.option.proc.292860674" name="-proc" superClass="xtensa.common.option.proc" useByScannerDiscovery="false" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.common.option.sirevision.999332530" name="-si-revision" superClass="xtensa.common.option.sirevision" useByScannerDiscovery="false" value=" any" valueType="string"/>
+								<option id="xtensa.common.option.coreid.1805044358" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="xtensa.common.option.coreid" useByScannerDiscovery="false" value="1" valueType="string"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.assembler.1949505335" name="CrossCore SHARC-FX Assembler" superClass="xtensa.sharcfx.toolchain.assembler">
+								<option defaultValue="false" id="xtensa.base.assembler.option.debug.enable.760594792" name="Enable debug information" superClass="xtensa.base.assembler.option.debug.enable" useByScannerDiscovery="false" valueType="boolean"/>
+								<option id="xtensa.common.option.proc.1163878957" name="-proc" superClass="xtensa.common.option.proc" useByScannerDiscovery="false" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.common.option.sirevision.439717062" name="-si-revision" superClass="xtensa.common.option.sirevision" useByScannerDiscovery="false" value=" any" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.assembler.option.preprocessdefs.1720975701" name="Preprocessor definitions (-D):" superClass="xtensa.base.assembler.option.preprocessdefs" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="CORE1"/>
+									<listOptionValue builtIn="false" value="NDEBUG"/>
+								</option>
+								<option id="xtensa.common.option.coreid.288204158" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="xtensa.common.option.coreid" useByScannerDiscovery="false" value="1" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.assembler.option.additionaldirectories.1519465180" name="Additional include directories (-I):" superClass="xtensa.base.assembler.option.additionaldirectories" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/system}&quot;"/>
+								</option>
+								<inputType id="xtensa.sharcfx.assembler.inputType.2116485156" name="Assembly Source" superClass="xtensa.sharcfx.assembler.inputType"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.c.compiler.1761011818" name="CrossCore SHARC-FX C Compiler" superClass="xtensa.sharcfx.toolchain.c.compiler">
+								<option defaultValue="true" id="xtensa.base.compiler.option.optimization.enable.1194058608" name="Enable optimization" superClass="xtensa.base.compiler.option.optimization.enable" useByScannerDiscovery="false" valueType="boolean"/>
+								<option defaultValue="xtensa.base.compiler.option.optimization.o3" id="xtensa.base.compiler.option.optimization.1521605527" name="Optimization level" superClass="xtensa.base.compiler.option.optimization" useByScannerDiscovery="false" valueType="enumerated"/>
+								<option defaultValue="false" id="xtensa.base.compiler.option.debug.enable.640615310" name="Enable debug information" superClass="xtensa.base.compiler.option.debug.enable" useByScannerDiscovery="false" valueType="boolean"/>
+								<option id="xtensa.common.option.proc.482342885" name="-proc" superClass="xtensa.common.option.proc" useByScannerDiscovery="false" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.common.option.sirevision.141832114" name="-si-revision" superClass="xtensa.common.option.sirevision" useByScannerDiscovery="false" value=" any" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.preprocessdefs.1550005113" name="Preprocessor definitions (-D):" superClass="xtensa.base.compiler.option.preprocessdefs" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="CORE1"/>
+									<listOptionValue builtIn="false" value="NDEBUG"/>
+								</option>
+								<option id="xtensa.common.option.coreid.1632461045" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="xtensa.common.option.coreid" useByScannerDiscovery="false" value="1" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.additionaldirectories.1767066888" name="Additional include directories (-I):" superClass="xtensa.base.compiler.option.additionaldirectories" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/system}&quot;"/>
+									<listOptionValue builtIn="false" value="../src/"/>
+									<listOptionValue builtIn="false" value="../../../TFLM/src/"/>
+									<listOptionValue builtIn="false" value="../../../TFLM/src/third_party/gemmlowp/"/>
+									<listOptionValue builtIn="false" value="../../../TFLM/src/third_party/flatbuffers/include/"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.additionaloptions.1346617401" name="Additional options:" superClass="xtensa.base.compiler.option.additionaloptions" useByScannerDiscovery="false" valueType="stringList">
+									<listOptionValue builtIn="false" value="-std=c11"/>
+								</option>
+								<inputType id="xtensa.sharcfx.c.compiler.inputType.310660539" name="C Source" superClass="xtensa.sharcfx.c.compiler.inputType"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.c.linker.1833704016" name="CrossCore SHARC-FX C Linker" superClass="xtensa.sharcfx.toolchain.c.linker">
+								<option id="xtensa.common.option.proc.1167013746" name="-proc" superClass="xtensa.common.option.proc" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.common.option.sirevision.1862768406" name="-si-revision" superClass="xtensa.common.option.sirevision" value=" any" valueType="string"/>
+								<option id="xtensa.common.option.coreid.1714679564" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="xtensa.common.option.coreid" value="1" valueType="string"/>
+								<inputType id="xtensa.base.linker.input.1887595028" superClass="xtensa.base.linker.input">
+									<additionalInput kind="additionaldependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionaldependency" paths="$(LSP_SRCS)"/>
+								</inputType>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.archiver.1553665143" name="CrossCore SHARC-FX Archiver" superClass="xtensa.sharcfx.toolchain.archiver"/>
+							<tool id="xtensa.sharcfx.toolchain.loader.1957901487" name="CrossCore SHARC-FX Loader" superClass="xtensa.sharcfx.toolchain.loader">
+								<option id="xtensa.loader.option.proc.135136721" name="-proc" superClass="xtensa.loader.option.proc" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.loader.option.sirevision.511222525" name="-si-revision" superClass="xtensa.loader.option.sirevision" value=" any" valueType="string"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.cpp.compiler.2091370314" name="CrossCore SHARC-FX C++ Compiler" superClass="xtensa.sharcfx.toolchain.cpp.compiler">
+								<option defaultValue="true" id="xtensa.base.compiler.option.optimization.enable.1412797555" name="Enable optimization" superClass="xtensa.base.compiler.option.optimization.enable" useByScannerDiscovery="false" valueType="boolean"/>
+								<option defaultValue="xtensa.base.compiler.option.optimization.o3" id="xtensa.base.compiler.option.optimization.273571356" name="Optimization level" superClass="xtensa.base.compiler.option.optimization" useByScannerDiscovery="false" valueType="enumerated"/>
+								<option defaultValue="false" id="xtensa.base.compiler.option.debug.enable.569739274" name="Enable debug information" superClass="xtensa.base.compiler.option.debug.enable" useByScannerDiscovery="false" valueType="boolean"/>
+								<option id="xtensa.common.option.proc.229086659" name="-proc" superClass="xtensa.common.option.proc" useByScannerDiscovery="false" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.common.option.sirevision.1196579225" name="-si-revision" superClass="xtensa.common.option.sirevision" useByScannerDiscovery="false" value=" any" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.preprocessdefs.1675277662" name="Preprocessor definitions (-D):" superClass="xtensa.base.compiler.option.preprocessdefs" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="CORE1"/>
+									<listOptionValue builtIn="false" value="NDEBUG"/>
+								</option>
+								<option id="xtensa.common.option.coreid.786298824" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="xtensa.common.option.coreid" useByScannerDiscovery="false" value="1" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.additionaldirectories.1296591694" name="Additional include directories (-I):" superClass="xtensa.base.compiler.option.additionaldirectories" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/system}&quot;"/>
+									<listOptionValue builtIn="false" value="../src/"/>
+									<listOptionValue builtIn="false" value="../../../TFLM/src/"/>
+									<listOptionValue builtIn="false" value="../../../TFLM/src/third_party/gemmlowp/"/>
+									<listOptionValue builtIn="false" value="../../../TFLM/src/third_party/flatbuffers/include/"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.additionaloptions.1281093153" name="Additional options:" superClass="xtensa.base.compiler.option.additionaloptions" useByScannerDiscovery="false" valueType="stringList">
+									<listOptionValue builtIn="false" value="-std=c++11"/>
+									<listOptionValue builtIn="false" value="-stdlib=libc++"/>
+								</option>
+								<inputType id="xtensa.sharcfx.cpp.compiler.inputType.1207142234" name="CPP Source" superClass="xtensa.sharcfx.cpp.compiler.inputType"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.cpp.linker.736882646" name="CrossCore SHARC-FX C++ Linker" superClass="xtensa.sharcfx.toolchain.cpp.linker">
+								<option id="xtensa.common.option.proc.1740689462" name="-proc" superClass="xtensa.common.option.proc" useByScannerDiscovery="false" value=" ADSP-SC835" valueType="string"/>
+								<option id="xtensa.common.option.sirevision.350393718" name="-si-revision" superClass="xtensa.common.option.sirevision" useByScannerDiscovery="false" value=" any" valueType="string"/>
+								<option id="xtensa.common.option.coreid.477347581" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="xtensa.common.option.coreid" useByScannerDiscovery="false" value="1" valueType="string"/>
+								<option id="xtensa.base.linker.option.lsp.2116553786" name="Linker Support Package (LSP)" superClass="xtensa.base.linker.option.lsp" useByScannerDiscovery="false" value="xtensa.base.linker.option.lsp.enumerated.custom" valueType="enumerated"/>
+								<option id="xtensa.base.linker.option.lsp.custom.1723056207" name="Custom LSP" superClass="xtensa.base.linker.option.lsp.custom" useByScannerDiscovery="false" value="&quot;${ProjDirPath}/system/startup_lsp/lsp&quot;" valueType="string"/>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.linker.option.additionaloptions.148696105" name="Additional options:" superClass="xtensa.base.linker.option.additionaloptions" useByScannerDiscovery="false" valueType="stringList">
+									<listOptionValue builtIn="false" value="-lstdc++11"/>
+									<listOptionValue builtIn="false" value="-stdlib=libc++"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.linker.option.libraryPaths.1999533349" name="Library search directories (-L):" superClass="xtensa.base.linker.option.libraryPaths" useByScannerDiscovery="false" valueType="libPaths">
+									<listOptionValue builtIn="false" value="../../../TFLM/Lib"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.linker.option.libs.875285702" name="Additional libraries (-l):" superClass="xtensa.base.linker.option.libs" useByScannerDiscovery="false" valueType="libs">
+									<listOptionValue builtIn="false" value="TFLM"/>
+								</option>
+								<inputType id="xtensa.base.linker.input.763734528" superClass="xtensa.base.linker.input">
+									<additionalInput kind="additionaldependency" paths="$(USER_OBJS)"/>
+									<additionalInput kind="additionaldependency" paths="$(LSP_SRCS)"/>
+								</inputType>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.deviceprogrammer.2099895970" name="CrossCore SHARC-FX Device Programmer" superClass="xtensa.sharcfx.toolchain.deviceprogrammer">
+								<option id="deviceprogrammer.option.proc.1164258346" name="-proc" superClass="deviceprogrammer.option.proc" value=" ADSP-SC835" valueType="string"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<folderInfo id="xtensa.sharcfx.toolchain.target.exe.release.856378625.system" name="system" resourcePath="system">
+						<toolChain id="xtensa.sharcfx.toolchain.373576581" name="CrossCore Xtensa SHARC-FX Toolchain" superClass="xtensa.sharcfx.toolchain" unusedChildren="">
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="xtensa.common.toolchain.platform.base" name="Development Platform" osList="all" superClass="xtensa.common.toolchain.platform.base"/>
+							<tool id="xtensa.common.toolchain.common.24809956" superClass="xtensa.common.toolchain.common.1521496905"/>
+							<tool id="xtensa.sharcfx.toolchain.assembler.2072024696" name="CrossCore SHARC-FX Assembler" superClass="xtensa.sharcfx.toolchain.assembler.1949505335">
+								<inputType id="xtensa.sharcfx.assembler.inputType.1819330016" name="Assembly Source" superClass="xtensa.sharcfx.assembler.inputType"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.c.compiler.1506255263" name="CrossCore SHARC-FX C Compiler" superClass="xtensa.sharcfx.toolchain.c.compiler.1761011818">
+								<inputType id="xtensa.sharcfx.c.compiler.inputType.1019294020" name="C Source" superClass="xtensa.sharcfx.c.compiler.inputType"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.c.linker.1770552637" name="CrossCore SHARC-FX C Linker" superClass="xtensa.sharcfx.toolchain.c.linker.1833704016">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.linker.option.additionaloptions.954928299" name="Additional options:" superClass="xtensa.base.linker.option.additionaloptions" valueType="stringList">
+									<listOptionValue builtIn="false" value="-lstdc++11"/>
+									<listOptionValue builtIn="false" value="-stdlib=libc++"/>
+								</option>
+								<option id="xtensa.base.linker.option.lsp.1821364966" superClass="xtensa.base.linker.option.lsp" value="xtensa.base.linker.option.lsp.enumerated.custom" valueType="enumerated"/>
+								<option id="xtensa.base.linker.option.lsp.custom.1837787869" superClass="xtensa.base.linker.option.lsp.custom" value="&quot;${ProjDirPath}/system/startup_lsp/lsp&quot;" valueType="string"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.archiver.1470592116" name="CrossCore SHARC-FX Archiver" superClass="xtensa.sharcfx.toolchain.archiver.1553665143"/>
+							<tool id="xtensa.sharcfx.toolchain.loader.2052020240" name="CrossCore SHARC-FX Loader" superClass="xtensa.sharcfx.toolchain.loader.1957901487"/>
+							<tool id="xtensa.sharcfx.toolchain.cpp.compiler.1719032592" name="CrossCore SHARC-FX C++ Compiler" superClass="xtensa.sharcfx.toolchain.cpp.compiler.2091370314">
+								<inputType id="xtensa.sharcfx.cpp.compiler.inputType.1867150271" name="CPP Source" superClass="xtensa.sharcfx.cpp.compiler.inputType"/>
+							</tool>
+							<tool id="xtensa.sharcfx.toolchain.cpp.linker.1775616735" name="CrossCore SHARC-FX C++ Linker" superClass="xtensa.sharcfx.toolchain.cpp.linker.736882646"/>
+							<tool id="xtensa.sharcfx.toolchain.deviceprogrammer.939035062" name="CrossCore SHARC-FX Device Programmer" superClass="xtensa.sharcfx.toolchain.deviceprogrammer">
+								<option id="deviceprogrammer.option.proc.45271627" name="-proc" superClass="deviceprogrammer.option.proc" value=" ADSP-SC835" valueType="string"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<sourceEntries>
+						<entry excluding="system|src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="system"/>
+					</sourceEntries>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="micro_speech.xtensa.sharcfx.toolchain.target.exe.123249657" name="SHARC-FX Executable Project" projectType="xtensa.sharcfx.toolchain.target.exe"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="org.eclipse.cdt.core.language.mapping">
+		<project-mappings>
+			<content-type-mapping configuration="" content-type="org.eclipse.cdt.core.asmSource" language="com.analog.crosscore.ui.asm.adi.extension"/>
+			<content-type-mapping configuration="" content-type="org.eclipse.cdt.core.cHeader" language="org.eclipse.cdt.core.c.adi.extension"/>
+			<content-type-mapping configuration="" content-type="org.eclipse.cdt.core.cSource" language="org.eclipse.cdt.core.c.adi.extension"/>
+			<content-type-mapping configuration="" content-type="org.eclipse.cdt.core.cxxHeader" language="org.eclipse.cdt.core.c++.adi.extension"/>
+			<content-type-mapping configuration="" content-type="org.eclipse.cdt.core.cxxSource" language="org.eclipse.cdt.core.c++.adi.extension"/>
+		</project-mappings>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="xtensa.sharcfx.toolchain.target.exe.release.856378625;xtensa.sharcfx.toolchain.target.exe.release.856378625.;xtensa.sharcfx.toolchain.c.compiler.1761011818;xtensa.sharcfx.c.compiler.inputType.310660539">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="xtensa.sharcfx.toolchain.target.exe.debug.1864430364;xtensa.sharcfx.toolchain.target.exe.debug.1864430364.;xtensa.sharcfx.toolchain.c.compiler.765990031;xtensa.sharcfx.c.compiler.inputType.1941195258">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="xtensa.sharcfx.toolchain.target.exe.release.856378625;xtensa.sharcfx.toolchain.target.exe.release.856378625.;xtensa.sharcfx.toolchain.cpp.compiler.2091370314;xtensa.sharcfx.cpp.compiler.inputType.1207142234">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="xtensa.sharcfx.toolchain.target.exe.debug.1864430364;xtensa.sharcfx.toolchain.target.exe.debug.1864430364.;xtensa.sharcfx.toolchain.cpp.compiler.1796528406;xtensa.sharcfx.cpp.compiler.inputType.312494711">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="refreshScope"/>
+</cproject>
