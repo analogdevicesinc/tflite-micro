@@ -26,8 +26,6 @@ limitations under the License.
 #include "tensorflow/lite/micro/kernels/kernel_util.h"
 #include "tensorflow/lite/micro/micro_log.h"
 #include "tensorflow/lite/micro/micro_utils.h"
-#include "tensorflow/lite/kernels/internal/optimized/primitives.h"
-
 
 namespace tflite {
 
@@ -109,15 +107,8 @@ TfLiteStatus CalculateArithmeticOpData(TfLiteContext* context, TfLiteNode* node,
       // The number 3.0 in the multiplier comes from here,
       // because the interval is [-10.7, 10.7] instead of [-8, 8].
       // So, in this scaling +/-2^17 represents +/-10.7.
-
-#ifdef OPT_TANH_INT16_MULTIPLIER
-    	double multiplier =
-    	          static_cast<double>(input->params.scale) * 4096.0;
-
-#else
       double multiplier =
           static_cast<double>(input->params.scale) * 4096.0 * 3.0;
-#endif
       data->input_left_shift = 0;
 
       while (multiplier <= 32767.0 / 2.0 && data->input_left_shift <= 30) {
@@ -175,33 +166,12 @@ TfLiteStatus TanhEval(TfLiteContext* context, TfLiteNode* node) {
     } break;
 
     case kTfLiteInt16: {
-#ifdef DISPLAY_CYCLE_COUNTS
-        	long int var = 0, cyc=0; //Variables for cycle counting
-			START_CYCLE_COUNT (var);
-#endif
-#ifdef USE_OPTIMIZED_TANH_INT16
-    	RuntimeShape input_shape = tflite::micro::GetTensorShape(input);
-    	RuntimeShape output_shape = tflite::micro::GetTensorShape(output);
-    	int32_t flat_size = MatchingFlatSize(input_shape, output_shape); //input length
-
-    	Tanh_opt_Int16(
-    			data.input_multiplier, data.input_left_shift,
-    			flat_size,
-    	        tflite::micro::GetTensorData<int16_t>(input),
-    	        tflite::micro::GetTensorData<int16_t>(output));
-
-#else
        reference_integer_ops::Tanh(
     	                data.input_multiplier, data.input_left_shift,
     	                tflite::micro::GetTensorShape(input),
     	                tflite::micro::GetTensorData<int16_t>(input),
     	                tflite::micro::GetTensorShape(output),
     	                tflite::micro::GetTensorData<int16_t>(output));
-#endif
-#ifdef DISPLAY_CYCLE_COUNTS
-		  STOP_CYCLE_COUNT (cyc, var);
-		  printf("\tNumber of cycles to run Tanh(INT_16) : \t%ld \n", cyc);
-#endif
       return kTfLiteOk;
     } break;
     case kTfLiteInt8: {
