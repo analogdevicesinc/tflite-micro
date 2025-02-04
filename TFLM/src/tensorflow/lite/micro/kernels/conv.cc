@@ -24,8 +24,6 @@ limitations under the License.
 #include "tensorflow/lite/micro/kernels/kernel_util.h"
 #include "tensorflow/lite/micro/micro_log.h"
 
-#include "primitives.h"
-
 namespace tflite {
 namespace {
 
@@ -133,11 +131,6 @@ TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
           break;
         }
         case kTfLiteInt8: {
-#ifdef DISPLAY_CYCLE_COUNTS
-        	long int var = 0, cyc=0; //Variables for cycle counting
-			START_CYCLE_COUNT (var);
-#endif
-#ifndef USE_OPTIMIZED_1x1_CONV
           reference_integer_ops::ConvPerChannel(
               ConvParamsQuantized(params, data),
               data.per_channel_output_multiplier, data.per_channel_output_shift,
@@ -149,67 +142,6 @@ TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
               tflite::micro::GetOptionalTensorData<int32_t>(bias),
               tflite::micro::GetTensorShape(output),
               tflite::micro::GetTensorData<int8_t>(output));
-#else
-          //TODO:assuming that input is now non-interleaved
-          ConvParams params_read = ConvParamsQuantized(params, data);
-          RuntimeShape input_shape = tflite::micro::GetTensorShape(input);
-          const int input_width = input_shape.Dims(2);
-          const int input_height = input_shape.Dims(1);
-          RuntimeShape filter_shape = tflite::micro::GetTensorShape(filter);
-          RuntimeShape output_shape = tflite::micro::GetTensorShape(output);
-          const int output_depth = MatchingDim(filter_shape, 0, output_shape, 3);
-          const int filter_input_depth = filter_shape.Dims(3);
-
-          const int filter_height = filter_shape.Dims(1);
-          const int filter_width = filter_shape.Dims(2);
-
-          int nBatchSize = 1;
-          if(filter_height == 1 && filter_width == 1){
-#ifndef USE_NON_INTERLEAVED_1x1_CONV
-              conv2d_1x1_8bitconv_16bitquant(tflite::micro::GetTensorData<int8_t>(input),
-					  	  	  	  	  	  	  tflite::micro::GetTensorData<int8_t>(filter),
-											  tflite::micro::GetOptionalTensorData<int32_t>(bias),
-            		  	  	  	  	  	  	  tflite::micro::GetTensorData<int8_t>(output),
-											  nBatchSize,
-											  filter_input_depth,
-											  output_depth,
-											  input_width*input_height,
-											  data.per_channel_output_multiplier,
-											  data.per_channel_output_shift,
-											  params_read.input_offset,
-											  params_read.output_offset);
-#else
-              conv2d_1x1_non_int_asm16(tflite::micro::GetTensorData<int8_t>(input),
-            		                  tflite::micro::GetTensorData<int8_t>(output),
-    								  tflite::micro::GetTensorData<int8_t>(filter),
-    								  tflite::micro::GetOptionalTensorData<int32_t>(bias),
-    								  input_width,
-    								  filter_input_depth,
-    								  output_depth,
-    								  (uint32_t *)data.per_channel_output_multiplier,
-    								  data.per_channel_output_shift,
-    								  params_read.input_offset,
-    								  (uint32_t)params_read.output_offset);
-#endif
-          } else{
-              reference_integer_ops::ConvPerChannel(
-                  ConvParamsQuantized(params, data),
-                  data.per_channel_output_multiplier, data.per_channel_output_shift,
-                  tflite::micro::GetTensorShape(input),
-                  tflite::micro::GetTensorData<int8_t>(input),
-                  tflite::micro::GetTensorShape(filter),
-                  tflite::micro::GetTensorData<int8_t>(filter),
-                  tflite::micro::GetTensorShape(bias),
-                  tflite::micro::GetOptionalTensorData<int32_t>(bias),
-                  tflite::micro::GetTensorShape(output),
-                  tflite::micro::GetTensorData<int8_t>(output));
-          }
-
-#endif
-#ifdef DISPLAY_CYCLE_COUNTS
-		  STOP_CYCLE_COUNT (cyc, var);
-		  printf("\tNumber of cycles to run Conv 1x1 Layer: \t%ld \n", cyc);
-#endif
           break;
         }
         default:

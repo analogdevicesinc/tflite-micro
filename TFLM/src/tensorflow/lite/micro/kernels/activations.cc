@@ -27,8 +27,6 @@ limitations under the License.
 #include "tensorflow/lite/micro/micro_log.h"
 #include "tensorflow/lite/micro/micro_utils.h"
 
-#include "primitives.h"
-
 namespace tflite {
 namespace {
 

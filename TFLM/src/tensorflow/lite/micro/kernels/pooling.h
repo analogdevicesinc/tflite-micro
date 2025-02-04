@@ -29,9 +29,6 @@ limitations under the License.
 #include "tensorflow/lite/micro/kernels/micro_ops.h"
 #include "tensorflow/lite/micro/micro_log.h"
 
-//#define DISPLAY_CYCLE_COUNTS
-#include "sharc/cycle_count.h" /* Define the macros */
-
 namespace tflite {
 
 extern const int kPoolingInputTensor;
@@ -77,19 +74,11 @@ void AveragePoolingEvalQuantized(TfLiteContext* context, const TfLiteNode* node,
   op_params.padding_values.width = data->padding.width;
   op_params.quantized_activation_min = data->activation_min;
   op_params.quantized_activation_max = data->activation_max;
-#ifdef DISPLAY_CYCLE_COUNTS
-        	long int var = 0, cyc=0; //Variables for cycle counting
-			START_CYCLE_COUNT (var);
-#endif
   reference_integer_ops::AveragePool(op_params,
                                      tflite::micro::GetTensorShape(input),
                                      tflite::micro::GetTensorData<T>(input),
                                      tflite::micro::GetTensorShape(output),
                                      tflite::micro::GetTensorData<T>(output));
-#ifdef DISPLAY_CYCLE_COUNTS
-		  STOP_CYCLE_COUNT (cyc, var);
-		  printf("\tNumber of cycles to run AvgPool Layer : \t%ld \n", cyc);
-#endif
 }
 
 void MaxPoolingEvalFloat(TfLiteContext* context, TfLiteNode* node,

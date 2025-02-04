@@ -26,8 +26,6 @@ limitations under the License.
 #include "tensorflow/lite/kernels/internal/reference/tanh.h"
 #include "tensorflow/lite/kernels/internal/types.h"
 
-#include "primitives.h"
-
 namespace tflite {
 
 LstmTensors::LstmTensors(TfLiteContext* context, TfLiteNode* node) {
