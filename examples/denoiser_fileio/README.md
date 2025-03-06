@@ -1,5 +1,6 @@
-# DTLN Denoiser
-This folder contains the SharcFX port of the DTLN(Dual-signal Transformation LSTM Network) denoiser application. 
+# DTLN Denoiser - Realtime
+This folder contains the SharcFX port of the DTLN(Dual-signal Transformation LSTM Network) denoiser application for realtime operation with the board. 
+This example utilizes the ADAU1979 ADC and the ADAU1962 DAC to operate in I2S mode for Audio talkthrough that has been leveraged to run the DTLN denoiser in realtime. The input from the ADC is downsampled and supplied to the denoiser model and the denoised output from the model is passed back to the DAC which can be heard through the Headphone connected.
 
 Original repo: https://github.com/breizhn/DTLN
 
@@ -12,22 +13,23 @@ The [DNS Challenge](https://github.com/microsoft/DNS-Challenge/) dataset was use
 |Content|Supported?|
 |:--------|:----------:|
 |float model|✅|
-|int8 quantized model|✅|
 |FileIO operation |✅|
 |Realtime operation |✅|
 
-##  Run application in FileIO mode
-* Follow the steps mentioned in the README file in `Eagle-TFLM\Utils\automated-model-conversion-dtln` to generate the models for the application. The batch script will download, convert both the int16 and float32 models and place them in the relevant locations for the project to access it. Ignore this step if already done for the `denoiser_realtime` project.
+## Model file generation
+* Model files in `common/model/model_fp` are required to build and run the application. Absence of .cc and .h files in this folder will lead to build errors.
+* Follow the steps mentioned in the README file in `Eagle-TFLM\Utils\automated-model-conversion-dtln` to generate the models for the application. The batch script will download, convert the float32 models and place them in the relevant locations for the project to access it. 
+* This is the first step to run the `denoiser_fileio` or the `denoiser_realtime` project. It needs to be done only once for denoiser application.
+
+## Data Input/Output generation
 * This example is intended for mono audio samples of 16KHz sampling rate only. 
+* Expected input: Requires audio_in.bin in `denoiser_fileio/src/input` folder. Follow the Readme in `Eagle-TFLM\Utils\denoiser` to generate the input file for testing the application.
+* Expected output: denoised audio signal will be stored in the `denoiser_fileio/src/` folder under `audio_out.bin`. 
+* The output bin file `denoised_audio.bin` can be converted back to wav format using the `convert_bin_to_wav.py` script from the Utils folder (`Eagle-TFLM\Utils\denoiser\scripts`). Please follow the Readme in `Eagle-TFLM\Utils\denoiser`. 
+
+##  Run application in FileIO mode
+* Open CCES and import the **denoiser_fileio** project into your CCES workspace. 
 * Build and run the **denoiser_fileio** project. Refer to the `ADI_TFLITE_MICRO_SHARCFX_UsersGuide.doc` for more information on how to build and run a project. 
-* Expected output: denoised audio signal will be stored in the `denoiser_fileio` folder under `audio_out.bin`. 
-* The output bin file `audio_out.bin` can be converted back to wav format using the `convert_bin_to_wav.py` script from the Utils folder (`Eagle-TFLM\Utils\denoiser-fileio`). Please note that this needs the packages numpy, librosa and soundfile which can be installed using 'pip install librosa numpy soundfile'. 
-* The default model used for running in FP32. You can switch to int16 activations/int8 weights model by enabling the macro 'DO_QUANTIZED_INFERENCE' present in 'main_functions.cc'
-* By default, the project will use a sample input provided as the input to the model. To use your own sample as input:
-	* Ensure the audio sample you wish to use as input to the model is sampled at **16000Hz**. 
-	* Use the `convert_wav_to_bin.py` script from the Utils folder (`Utils\denoiser-fileio`) to convert your audio wav file into corresponding bin files. 
-	* Copy the input bin files into the project folder - `examples\denoiser_fileio\src\input`.
-	* Replace the name of the converted input bin file in the `OpenInputFile()` function in `src\frame_provider.cc`. 
 
 ##  Run application in Realtime mode
 * Implemented as a separate project: Check `denoiser_realtime`
