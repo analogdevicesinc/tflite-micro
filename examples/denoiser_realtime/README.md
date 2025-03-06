@@ -1,6 +1,6 @@
 # DTLN Denoiser - Realtime
 This folder contains the SharcFX port of the DTLN(Dual-signal Transformation LSTM Network) denoiser application for realtime operation with the board. 
-This example utilizes the ADAU1979 ADC and the ADAU1962a DAC to operate in I2S mode for Audio talkthrough that has been leveraged to run the DTLN denoiser in realtime. The input from the ADC is downsampled and supplied to the denoiser model and the denoised output from the model is passed back to the DAC which can be heard through the Headphone connected.
+This example utilizes the ADAU1979 ADC and the ADAU1962 DAC to operate in I2S mode for Audio talkthrough that has been leveraged to run the DTLN denoiser in realtime. The input from the ADC is downsampled and supplied to the denoiser model and the denoised output from the model is passed back to the DAC which can be heard through the Headphone connected.
 
 Original repo: https://github.com/breizhn/DTLN
 
@@ -13,13 +13,20 @@ The [DNS Challenge](https://github.com/microsoft/DNS-Challenge/) dataset was use
 |Content|Supported?|
 |:--------|:----------:|
 |float model|✅|
-|int8 quantized model|✅|
 |FileIO operation |✅|
 |Realtime operation |✅|
 
+## Model file generation
+* Model files in `common/model/model_fp` are required to build and run the application. Absence of .cc and .h files in this folder will lead to build errors.
+* Follow the steps mentioned in the README file in `Eagle-TFLM\Utils\automated-model-conversion-dtln` to generate the models for the application. The batch script will download, convert the float32 models and place them in the relevant locations for the project to access it. 
+* This is the first step to run the `denoiser_fileio` or the `denoiser_realtime` project. It needs to be done only once for denoiser application.
+
+## Data Input/Output generation
+* This example is intended for mono audio samples of 16KHz sampling rate only. 
+* Expected Input: Follow the Readme in `Eagle-TFLM\Utils\denoiser` to download and use the input file. You can use any custom noisy file of your choise for testing.
+
 ##  Run application in FileIO mode
 * Implemented as a separate project: Check `denoiser_fileio`
-
 
 ##  Run application in Realtime mode
 
@@ -39,12 +46,9 @@ The [DNS Challenge](https://github.com/microsoft/DNS-Challenge/) dataset was use
 * Both the ADC and DAC are configured in I2S mode. ADAU1962a DAC is configured to provide clock and frame sync to SPORT4A, SPORT4B and ADAU1979 ADC.
 
 ### Software 
-* Follow the steps mentioned in the README file in `Eagle-TFLM\Utils\automated-model-conversion-dtln` to generate the models for the application. The batch script will download, convert both the int16 and float32 models and place them in the relevant locations for the project to access it. Ignore this step if already done for the `denoiser_fileio` project.
 * Open CCES and import the **denoiser_realtime** project into your CCES workspace. 
 * Running the project will load the application onto the board, given all the connections are made correctly. 
-* Once the application has been sucessfully loaded, an audio input can be suppplied by the cable connected to J12. We combine both the stereo inputs and run through the denoiser. The denoised output is played back through both channels of the output device.  
+* Once the application has been sucessfully loaded, an audio wav file can be played on the laptop/PC connected to the ADSPSC8xx and ADSP218xx board and the input can be suppplied by the cable connected to J12. We combine both the stereo inputs and run through the denoiser. The denoised output is played back through both channels of the output device.  
 * The ADC and DAC are configured at 48KHz so the module will decimate this to 16KHz before passing through the denoiser and then interpolate the output to 48KHz before playing back from the DAC. 
 * The denosied output will be available on the device connected to J17 connector. 
 * By default the application is set to denoised mode. You can toggle the modes between denoising and playing audio without denoising in passthrough mode, by pressing the PB1/SW3 button. The LED9 will be on when this is in denoising mode and be off in passthrough mode. 
-* The default model used for running in FP32. You can switch to int16 activations/int8 weights model by enabling the macro 'DO_QUANTIZED_INFERENCE' present in 'main_functions.cc'
-
