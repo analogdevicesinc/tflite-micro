@@ -1,0 +1,2 @@
+This folder should contain the model files from publicly available prebuilt models for the dtln project. Since these models do not have a permissive license for direct redistribution, we provide scripts to obtain and convert them instead of sharing the model files. <br>
+Please follow `Eagle-TFLM\Utils\automated-model-conversion-dtln` to generate the model files.
