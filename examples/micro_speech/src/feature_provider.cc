@@ -36,7 +36,7 @@ TfLiteStatus FeatureProvider::PopulateFeatureData(int32_t last_time_in_ms,
                                                   int32_t time_in_ms,
                                                   int* how_many_new_slices) {
   if (feature_size_ != kFeatureElementCount) {
-    MicroPrintf("Requested feature_data_ size %d doesn't match %d",
+    PRINT_INFO("\nRequested feature_data_ size %d doesn't match %d\n",
                 feature_size_, kFeatureElementCount);
     return kTfLiteError;
   }
@@ -101,7 +101,7 @@ TfLiteStatus FeatureProvider::PopulateFeatureData(int32_t last_time_in_ms,
                       kFeatureSliceDurationMs, &audio_samples_size,
                       &audio_samples);
       if (audio_samples_size < kMaxAudioSampleSize) {
-        MicroPrintf("Audio data size %d too small, want %d", audio_samples_size,
+        PRINT_INFO("\n Audio data size %d too small, want %d \n ", audio_samples_size,
                     kMaxAudioSampleSize);
         return kTfLiteError;
       }

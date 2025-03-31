@@ -1,0 +1,1 @@
+All the individual folders contain the corresponding applications that have been ported to run on SharcFX. 

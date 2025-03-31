@@ -25,6 +25,13 @@ limitations under the License.
 #include "tensorflow/lite/micro/system_setup.h"
 #include "tensorflow/lite/schema/schema_generated.h"
 
+//#define DISPLAY_CYCLE_COUNTS
+#ifdef DISPLAY_CYCLE_COUNTS   /* Enable the macros */
+#define DO_CYCLE_COUNTS       //Needed internally
+#define __PRE_FX_COMPATIBILITY
+#include "cycle_count.h" /* Define the macros */
+#endif
+
 // Globals, used for compatibility with Arduino-style sketches.
 namespace {
 const tflite::Model* model = nullptr;
@@ -98,11 +105,18 @@ void loop() {
     MicroPrintf("Image capture failed.");
   }
 
+#ifdef DO_CYCLE_COUNTS
+    long int var = 0, cyc=0; //Variables for cycle counting
+	START_CYCLE_COUNT (var);
+#endif
   // Run the model on this input and make sure it succeeds.
   if (kTfLiteOk != interpreter->Invoke()) {
     MicroPrintf("Invoke failed.");
   }
-
+#ifdef DO_CYCLE_COUNTS
+	STOP_CYCLE_COUNT (cyc, var);
+	printf("\tNumber of cycles to run: \t%ld \n", cyc);
+#endif
   TfLiteTensor* output = interpreter->output(0);
 
   // Process the inference results.

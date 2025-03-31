@@ -21,6 +21,6 @@ limitations under the License.
 // console. Real applications will want to take some custom action instead, and
 // should implement their own versions of this function.
 void RespondToDetection(int8_t person_score, int8_t no_person_score) {
-  MicroPrintf("person score:%d no person score %d", person_score,
+  PRINT_INFO("\n person score:%d no person score %d\n", person_score,
               no_person_score);
 }
