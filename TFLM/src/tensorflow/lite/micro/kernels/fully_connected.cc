@@ -23,6 +23,7 @@ limitations under the License.
 #include "tensorflow/lite/micro/kernels/kernel_util.h"
 #include "tensorflow/lite/micro/micro_log.h"
 
+#include "adi_sharcfx_nn.h"
 #define BUFFER_LENGTH 25*20*8 //Buffer length is calculated based on expected input dimensions for FC layer(here, calculated for micro_speech)
 int8_t pInputBuffer_8bit[BUFFER_LENGTH]__attribute__((section(".L2.data"), aligned(16)));
 int16_t pInputBuffer_16bit[BUFFER_LENGTH]__attribute__((section(".L2.data"), aligned(16)));
@@ -147,6 +148,11 @@ TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
           break;
         }
         case kTfLiteInt8: {
+#ifdef DISPLAY_CYCLE_COUNTS
+        	cycle_t var = 0, cyc=0; //Variables for cycle counting
+			START_CYCLE_COUNT (var);
+#endif
+#ifndef USE_OPTIMIZED_FC
           tflite::reference_integer_ops::FullyConnected(
               FullyConnectedParamsQuantized(data),
               tflite::micro::GetTensorShape(input),
@@ -157,6 +163,98 @@ TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
               tflite::micro::GetOptionalTensorData<int32_t>(bias),
               tflite::micro::GetTensorShape(output),
               tflite::micro::GetTensorData<int8_t>(output));
+#else
+#ifdef USE_OPTIMIZED_DEPTHCONV
+		  RuntimeShape input_shape = tflite::micro::GetTensorShape(input);
+		  const int input_width2 = input_shape.Dims(1);//25
+		  const int input_width1 = input_shape.Dims(2);//20
+		  const int input_channels = input_shape.Dims(3);//8
+		  /* Current optimised depthconv function processes data in non-interleaved format.
+		   * All optimised functions will support interleaved data moving forward.
+		   * Until depthconv is re-worked to make it work with interleaved data format,
+		   * this is a temporary fix to maintain compatibility with the new optimised
+		   * and reference TFLM functions.
+		   *
+		   * The following code interleaves the input data, in case the previous layer
+		   * is an optimised depthconv layer (which gives non-interleaved output data),
+		   * which is the case in micro_speech example application.
+		   */
+
+		  //Check if input dimensions are within the buffer range to perform a data interleaving operation, if not fall back to reference TFLM code
+		  if((input_width2 * input_width1 * input_channels) <= BUFFER_LENGTH){
+			  const int8_t *pInTemp = tflite::micro::GetTensorData<int8_t>(input);
+			  for(int nCh = 0;nCh < input_channels;nCh++)
+			  {
+				  for(int nCol = 0;nCol < input_width2;nCol++)
+				  {
+					  for(int nRow = 0;nRow < input_width1;nRow++)
+					  {
+						  pInputBuffer_8bit[nCol * input_width1 * input_channels + nRow * input_channels + nCh] =
+								  pInTemp[nCh*input_width2*input_width1 + nCol*input_width1 + nRow];//
+
+					  }
+				  }
+			  }
+		  }
+		  else{
+	          tflite::reference_integer_ops::FullyConnected(
+	              FullyConnectedParamsQuantized(data),
+	              tflite::micro::GetTensorShape(input),
+	              tflite::micro::GetTensorData<int8_t>(input),
+	              tflite::micro::GetTensorShape(filter),
+	              tflite::micro::GetTensorData<int8_t>(filter),
+	              tflite::micro::GetTensorShape(bias),
+	              tflite::micro::GetOptionalTensorData<int32_t>(bias),
+	              tflite::micro::GetTensorShape(output),
+	              tflite::micro::GetTensorData<int8_t>(output));
+			  break;
+		  }
+#endif
+          FullyConnectedParams params_read = FullyConnectedParamsQuantized(data);
+          RuntimeShape filter_shape = tflite::micro::GetTensorShape(filter);
+          RuntimeShape output_shape = tflite::micro::GetTensorShape(output);
+          adi_sharcfx_fully_connected_int8(
+#ifdef USE_OPTIMIZED_DEPTHCONV
+		    pInputBuffer_8bit,
+#else
+        	tflite::micro::GetTensorData<int8_t>(input),
+#endif
+			tflite::micro::GetTensorData<int8_t>(filter),
+			tflite::micro::GetOptionalTensorData<int32_t>(bias),
+			tflite::micro::GetTensorData<int8_t>(output),
+			filter_shape.Dims(filter_shape.DimensionsCount()-1),					//filter_shape.Dims(filter_dim_count - 1),;
+			output_shape.Dims(output_shape.DimensionsCount() - 1),
+			FlatSizeSkipDim(output_shape, output_shape.DimensionsCount() - 1),//batches
+			params_read.output_multiplier,
+			params_read.output_shift,
+			params_read.input_offset,
+			params_read.weights_offset,
+			params_read.output_offset,
+			params_read.quantized_activation_min,
+			params_read.quantized_activation_max);
+#endif
+#ifdef DISPLAY_CYCLE_COUNTS
+		  STOP_CYCLE_COUNT (cyc, var);
+		  PRINT_INFO("\nNumber of cycles to run FullyConnected Layer : \t%lu \n", cyc);
+#endif
+#ifdef SAVE_OUTPUTS
+	int8_t * temp =  tflite::micro::GetTensorData<int8_t>(output);
+#ifdef USE_OPTIMIZED_FC
+	FILE *fp = fopen("optimised-output-FC.txt","w");
+	for (int i=0; i<4; i++)
+	{
+		fprintf(fp, "%d\t", *temp++);
+	}
+	fclose(fp);
+#else
+	FILE *fp = fopen("reference-output-FC.txt","w");
+	for (int i=0; i<4; i++)
+	{
+		fprintf(fp, "%d\t", *temp++);
+	}
+	fclose(fp);
+#endif
+#endif
           break;
         }
         default: {
@@ -171,6 +269,11 @@ TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
     case kTfLiteInt16: {
       switch (filter->type) {
         case kTfLiteInt8: {
+#ifdef DISPLAY_CYCLE_COUNTS
+        	cycle_t var = 0, cyc=0; //Variables for cycle counting
+			START_CYCLE_COUNT (var);
+#endif
+#ifndef USE_OPTIMIZED_FC
           tflite::reference_integer_ops::FullyConnected(
               FullyConnectedParamsQuantized(data),
               tflite::micro::GetTensorShape(input),
@@ -181,6 +284,79 @@ TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
               tflite::micro::GetOptionalTensorData<int64_t>(bias),
               tflite::micro::GetTensorShape(output),
               tflite::micro::GetTensorData<int16_t>(output));
+#else
+#ifdef USE_OPTIMIZED_DEPTHCONV
+		  //FIXME: Change the depthconv to work with interleaved data. Once that is done, the following interleaving step can be removed.
+		  RuntimeShape input_shape = tflite::micro::GetTensorShape(input);
+		  const int input_width2 = input_shape.Dims(1);//25
+		  const int input_width1 = input_shape.Dims(2);//20
+		  const int input_channels = input_shape.Dims(3);//8
+
+		  /* Current optimised depthconv function processes data in non-interleaved format.
+		   * All optimised functions will support interleaved data moving forward.
+		   * Until depthconv is re-worked to make it work with interleaved data format,
+		   * this is a temporary fix to maintain compatibility with the new optimised
+		   * and reference TFLM functions.
+		   *
+		   * The following code interleaves the input data, in case the previous layer
+		   * is an optimised depthconv layer (which gives non-interleaved output data),
+		   * which is the case in micro_speech example application.
+		   */
+
+		  //Check if input dimensions are within the buffer range to perform a data interleaving operation, if not fall back to reference TFLM code
+		  if((input_width2 * input_width1 * input_channels) <= BUFFER_LENGTH){
+
+			  const int16_t *pInTemp = tflite::micro::GetTensorData<int16_t>(input);
+			  for(int nCh = 0;nCh < input_channels;nCh++)
+			  {
+				  for(int nCol = 0;nCol < input_width2;nCol++)
+				  {
+					  for(int nRow = 0;nRow < input_width1;nRow++)
+					  {
+						  pInputBuffer_16bit[nCol * input_width1 * input_channels + nRow * input_channels + nCh] =
+								  pInTemp[nCh*input_width2*input_width1 + nCol*input_width1 + nRow];//
+
+					  }
+				  }
+			  }
+		  }
+		  else{
+	          tflite::reference_integer_ops::FullyConnected(
+	              FullyConnectedParamsQuantized(data),
+	              tflite::micro::GetTensorShape(input),
+	              tflite::micro::GetTensorData<int16_t>(input),
+	              tflite::micro::GetTensorShape(filter),
+	              tflite::micro::GetTensorData<int8_t>(filter),
+	              tflite::micro::GetTensorShape(bias),
+	              tflite::micro::GetOptionalTensorData<int64_t>(bias),
+	              tflite::micro::GetTensorShape(output),
+	              tflite::micro::GetTensorData<int16_t>(output));
+			  break;
+		  }
+#endif
+          FullyConnectedParams params_read = FullyConnectedParamsQuantized(data);
+          RuntimeShape filter_shape = tflite::micro::GetTensorShape(filter);
+          RuntimeShape output_shape = tflite::micro::GetTensorShape(output);
+          adi_sharcfx_fully_connected_int16(
+#ifdef USE_OPTIMIZED_DEPTHCONV
+		    pInputBuffer_16bit,
+#else
+        	tflite::micro::GetTensorData<int16_t>(input),
+#endif
+			tflite::micro::GetTensorData<int8_t>(filter),
+			tflite::micro::GetOptionalTensorData<int32_t>(bias),
+			tflite::micro::GetTensorData<int16_t>(output),
+			filter_shape.Dims(filter_shape.DimensionsCount()-1),					//filter_shape.Dims(filter_dim_count - 1),;
+			output_shape.Dims(output_shape.DimensionsCount() - 1),
+			FlatSizeSkipDim(output_shape, output_shape.DimensionsCount() - 1),//batches
+			params_read.output_multiplier,
+			params_read.output_shift,
+			params_read.input_offset,
+			params_read.weights_offset,
+			params_read.output_offset,
+			params_read.quantized_activation_min,
+			params_read.quantized_activation_max);
+#endif
           break;
         }
         default: {

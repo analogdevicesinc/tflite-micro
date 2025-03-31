@@ -23,6 +23,7 @@ limitations under the License.
 #include "tensorflow/lite/micro/kernels/kernel_util.h"
 #include "tensorflow/lite/micro/memory_helpers.h"
 #include "tensorflow/lite/micro/micro_utils.h"
+#include "adi_sharcfx_nn.h"
 
 namespace tflite {
 namespace ops {
@@ -97,6 +98,10 @@ TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
       tflite::micro::GetEvalInput(context, node, kInputTensor);
   TfLiteEvalTensor* output =
       tflite::micro::GetEvalOutput(context, node, kOutputTensor);
+#ifdef DISPLAY_CYCLE_COUNTS
+    	cycle_t pre_var_test, pre_cyc_test;
+		START_CYCLE_COUNT (pre_var_test);
+#endif
 
   // TODO(b/162522304): storing input bytes in OpData increases some models
   // significantly, possibly due to alignment issues.
@@ -109,6 +114,12 @@ TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
     // Otherwise perform reshape with copy.
     memcpy(output->data.raw, input->data.raw, input_bytes);
   }
+#ifdef DISPLAY_CYCLE_COUNTS
+
+        STOP_CYCLE_COUNT (pre_cyc_test, pre_var_test);
+		PRINT_INFO("\nNumber of cycles Reshape : %lu\n",pre_cyc_test);
+
+#endif
   return kTfLiteOk;
 }
 

@@ -20,7 +20,10 @@ limitations under the License.
 #include "tensorflow/lite/micro/kernels/pooling.h"
 #include "tensorflow/lite/micro/micro_log.h"
 
+#include "adi_sharcfx_nn.h"
 namespace tflite {
+
+int8_t pTempPool[128*128*128]__attribute__((section(".L3.data"), aligned(8)));
 
 namespace {
 
@@ -42,10 +45,18 @@ TfLiteStatus AverageEval(TfLiteContext* context, TfLiteNode* node) {
     case kTfLiteFloat32:
       AveragePoolingEvalFloat(context, node, params, data, input, output);
       break;
-    case kTfLiteInt8:
+    case kTfLiteInt8:{
+#ifdef DISPLAY_CYCLE_COUNTS
+        	cycle_t var = 0, cyc=0; //Variables for cycle counting
+			START_CYCLE_COUNT (var);
+#endif
       AveragePoolingEvalQuantized<int8_t>(context, node, params, data, input,
                                           output);
-      break;
+#ifdef DISPLAY_CYCLE_COUNTS
+		  STOP_CYCLE_COUNT (cyc, var);
+		  PRINT_INFO("\nNumber of cycles to run Avg pooling Layer kTfLiteInt8 %lu:\n", cyc);
+#endif
+      break;}
     case kTfLiteInt16:
       AveragePoolingEvalQuantized<int16_t>(context, node, params, data, input,
                                            output);
@@ -76,8 +87,44 @@ TfLiteStatus MaxEval(TfLiteContext* context, TfLiteNode* node) {
       MaxPoolingEvalFloat(context, node, params, data, input, output);
       break;
     case kTfLiteInt8:
-      MaxPoolingEvalQuantized<int8_t>(context, node, params, data, input,
-                                      output);
+    {
+#ifdef DISPLAY_CYCLE_COUNTS
+		cycle_t var = 0, cyc=0; //Variables for cycle counting
+		START_CYCLE_COUNT (var);
+#endif
+#ifndef USE_OPTIMIZED_MAXPOOL
+        MaxPoolingEvalQuantized<int8_t>(context, node, params, data, input,
+                                        output);
+#else
+        const RuntimeShape& input_shape = tflite::micro::GetTensorShape(input);
+        const RuntimeShape& output_shape = tflite::micro::GetTensorShape(output);
+        const int input_height = input_shape.Dims(1);
+        const int input_width = input_shape.Dims(2);
+        const int output_height = output_shape.Dims(1);
+        const int output_width = output_shape.Dims(2);
+        const int depth = MatchingDim(input_shape, 3, output_shape, 3);
+        adi_sharcfx_maxpool_int8(
+        						input_height,
+        						input_width,
+        						output_height,
+        						output_width,
+        						params->stride_height,
+        						params->stride_width,
+        						params->filter_height,
+        						params->filter_width,
+        						data->padding.height,
+        						data->padding.width,
+        						data->activation_min,
+        						data->activation_max,
+        						depth,
+        						tflite::micro::GetTensorData<int8_t>(input),
+        						tflite::micro::GetTensorData<int8_t>(output));
+#endif
+#ifdef DISPLAY_CYCLE_COUNTS
+	  STOP_CYCLE_COUNT (cyc, var);
+	  PRINT_INFO("\nNumber of cycles to run MaxPooling Layer :  %lu\n", cyc);
+#endif
+    }
       break;
     case kTfLiteInt16:
       MaxPoolingEvalQuantized<int16_t>(context, node, params, data, input,

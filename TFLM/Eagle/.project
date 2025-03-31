@@ -39,6 +39,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>shared</name>
+			<type>2</type>
+			<locationURI>PARENT-2-PROJECT_LOC/examples/shared</locationURI>
+		</link>
+		<link>
 			<name>src</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -1774,19 +1779,19 @@
 			<locationURI>PARENT-1-PROJECT_LOC/src/tensorflow/lite/experimental/microfrontend/lib/window_util.h</locationURI>
 		</link>
 		<link>
+			<name>src/tensorflow/lite/kernels/internal/optimized/adi_sharcfx_common.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/adi_sharcfx_nn/Include/adi_sharcfx_common.h</locationURI>
+		</link>
+		<link>
+			<name>src/tensorflow/lite/kernels/internal/optimized/adi_sharcfx_nn.h</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/adi_sharcfx_nn/Include/adi_sharcfx_nn.h</locationURI>
+		</link>
+		<link>
 			<name>src/tensorflow/lite/kernels/internal/optimized/neon_check.h</name>
 			<type>1</type>
 			<locationURI>PARENT-1-PROJECT_LOC/src/tensorflow/lite/kernels/internal/optimized/neon_check.h</locationURI>
-		</link>
-		<link>
-			<name>src/tensorflow/lite/kernels/internal/optimized/primitives.cpp</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/src/tensorflow/lite/kernels/internal/optimized/primitives.cpp</locationURI>
-		</link>
-		<link>
-			<name>src/tensorflow/lite/kernels/internal/optimized/primitives.h</name>
-			<type>1</type>
-			<locationURI>PARENT-1-PROJECT_LOC/src/tensorflow/lite/kernels/internal/optimized/primitives.h</locationURI>
 		</link>
 		<link>
 			<name>src/tensorflow/lite/kernels/internal/reference/add.h</name>

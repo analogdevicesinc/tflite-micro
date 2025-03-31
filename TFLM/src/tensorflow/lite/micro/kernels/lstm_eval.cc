@@ -26,6 +26,8 @@ limitations under the License.
 #include "tensorflow/lite/kernels/internal/reference/tanh.h"
 #include "tensorflow/lite/kernels/internal/types.h"
 
+#include "adi_sharcfx_nn.h"
+
 namespace tflite {
 
 LstmTensors::LstmTensors(TfLiteContext* context, TfLiteNode* node) {

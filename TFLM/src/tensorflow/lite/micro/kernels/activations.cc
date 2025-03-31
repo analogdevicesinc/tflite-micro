@@ -27,6 +27,8 @@ limitations under the License.
 #include "tensorflow/lite/micro/micro_log.h"
 #include "tensorflow/lite/micro/micro_utils.h"
 
+#include "adi_sharcfx_nn.h"
+
 namespace tflite {
 namespace {
 
@@ -55,7 +57,7 @@ TfLiteStatus ReluEval(TfLiteContext* context, TfLiteNode* node) {
     }
     case kTfLiteInt8: {
 #ifdef USE_OPTIMIZED_LSTM
-    	ReluQuantized_asm_8bit(
+    	adi_sharcfx_relu_int8(
 			tflite::micro::GetTensorData<int8_t>(input),
 			tflite::micro::GetTensorData<int8_t>(output),
 			MatchingFlatSize(tflite::micro::GetTensorShape(input), tflite::micro::GetTensorShape(output)),
