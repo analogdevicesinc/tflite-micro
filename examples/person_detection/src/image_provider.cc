@@ -27,7 +27,10 @@ TfLiteStatus GetImage(int image_width, int image_height, int channels,
     image_data[i] = 0;
   }
 #else
-  FILE *fp = fopen("../src/person.bin","rb");
+  FILE *fp = fopen("../src/input/is_person.bin","rb");
+  if (fp==NULL){
+	  PRINT_INFO("Failed to read the input file. Check if the is_person.bin is available in input folder.Refer person_detection/Readme.");
+  }
   fread(image_data, sizeof(int8_t), image_width * image_height * channels, fp);
   fclose(fp);
 #endif

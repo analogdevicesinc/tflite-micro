@@ -17,7 +17,7 @@ limitations under the License.
 #define TENSORFLOW_LITE_MICRO_EXAMPLES_PERSON_DETECTION_IMAGE_PROVIDER_H_
 
 #include "tensorflow/lite/c/common.h"
-
+#include "debug.h"
 // This is an abstraction around an image source like a camera, and is
 // expected to return 8-bit sample data.  The assumption is that this will be
 // called in a low duty-cycle fashion in a low-power application.  In these
