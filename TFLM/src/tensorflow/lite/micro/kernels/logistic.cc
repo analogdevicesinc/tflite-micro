@@ -26,6 +26,7 @@ limitations under the License.
 #include "tensorflow/lite/micro/kernels/kernel_util.h"
 #include "tensorflow/lite/micro/kernels/logistic.h"
 #include "tensorflow/lite/micro/micro_log.h"
+#include "adi_sharcfx_nn.h"
 
 namespace tflite {
 namespace {
@@ -62,11 +63,28 @@ TfLiteStatus LogisticEval(TfLiteContext* context, TfLiteNode* node) {
   } else if (input->type == kTfLiteInt16) {
     switch (output->type) {
       case kTfLiteInt16: {
+#ifdef DISPLAY_CYCLE_COUNTS
+        	long int var = 0, cyc=0; //Variables for cycle counting
+			START_CYCLE_COUNT (var);
+#endif
+#ifdef USE_OPTIMIZED_LOGISTIC_INT16
+			adi_sharcfx_logistic_int16(
+    	      data->input_multiplier, data->input_left_shift,
+    	      NumElements(input->dims),
+    	      tflite::micro::GetTensorData<int16_t>(input),
+    	      tflite::micro::GetTensorData<int16_t>(output));
+
+#else
         reference_integer_ops::Logistic(
             data->input_multiplier, data->input_left_shift,
             NumElements(input->dims),
             tflite::micro::GetTensorData<int16_t>(input),
             tflite::micro::GetTensorData<int16_t>(output));
+#endif
+#ifdef DISPLAY_CYCLE_COUNTS
+		  STOP_CYCLE_COUNT (cyc, var);
+		  printf("\tNumber of cycles to run Logistic(INT_16) : \t%ld \n", cyc);
+#endif
         return kTfLiteOk;
       }
       default:
@@ -78,12 +96,33 @@ TfLiteStatus LogisticEval(TfLiteContext* context, TfLiteNode* node) {
   } else if (input->type == kTfLiteInt8) {
     switch (output->type) {
       case kTfLiteInt8: {
+
+#ifdef DISPLAY_CYCLE_COUNTS
+        	long int var = 0, cyc=0; //Variables for cycle counting
+			START_CYCLE_COUNT (var);
+#endif
+
+#ifdef USE_OPTIMIZED_LOGISTIC_INT8
+			adi_sharcfx_logistic_int8(
+    			  data->input_zero_point, data->input_multiplier,
+				  data->input_left_shift,
+    			  NumElements(input->dims),
+    			  tflite::micro::GetTensorData<int8_t>(input),
+    			  tflite::micro::GetTensorData<int8_t>(output));
+
+
+#else
     	  reference_integer_ops::Logistic(
     	  data->input_zero_point, data->input_range_radius,
     	  data->input_multiplier, data->input_left_shift,
     	  NumElements(input->dims),
     	  tflite::micro::GetTensorData<int8_t>(input),
     	  tflite::micro::GetTensorData<int8_t>(output));
+#endif
+#ifdef DISPLAY_CYCLE_COUNTS
+		  STOP_CYCLE_COUNT (cyc, var);
+		  printf("\tNumber of cycles to run Logistic(INT_8) : \t%ld \n", cyc);
+#endif
         return kTfLiteOk;
       }
       default:

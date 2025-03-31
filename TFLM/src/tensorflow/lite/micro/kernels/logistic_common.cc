@@ -24,6 +24,7 @@ limitations under the License.
 #include "tensorflow/lite/kernels/op_macros.h"
 #include "tensorflow/lite/micro/kernels/kernel_util.h"
 #include "tensorflow/lite/micro/kernels/logistic.h"
+#include "adi_sharcfx_nn.h"
 
 namespace tflite {
 const int kLogisticInputTensor = 0;

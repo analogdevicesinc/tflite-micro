@@ -26,6 +26,8 @@ limitations under the License.
 #include "tensorflow/lite/micro/kernels/kernel_util.h"
 #include "tensorflow/lite/micro/micro_log.h"
 
+#include "adi_sharcfx_nn.h"
+
 namespace tflite {
 namespace {
 
@@ -39,11 +41,19 @@ void SoftmaxQuantized(const TfLiteEvalTensor* input, TfLiteEvalTensor* output,
           tflite::micro::GetTensorShape(output),
           tflite::micro::GetTensorData<int16_t>(output));
     } else {
+#ifdef DISPLAY_CYCLE_COUNTS
+        	cycle_t var = 0, cyc=0; //Variables for cycle counting
+			START_CYCLE_COUNT (var);
+#endif
       tflite::reference_ops::Softmax(
           op_data, tflite::micro::GetTensorShape(input),
           tflite::micro::GetTensorData<int8_t>(input),
           tflite::micro::GetTensorShape(output),
           tflite::micro::GetTensorData<int8_t>(output));
+#ifdef DISPLAY_CYCLE_COUNTS
+		  STOP_CYCLE_COUNT (cyc, var);
+		  PRINT_INFO("\nNumber of cycles to run Softmax Layer : \t%lu \n", cyc);
+#endif
     }
   } else {
     tflite::reference_ops::SoftmaxInt16(

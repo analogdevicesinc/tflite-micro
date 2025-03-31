@@ -20,6 +20,7 @@ limitations under the License.
 #include "tensorflow/lite/kernels/kernel_util.h"
 #include "tensorflow/lite/micro/kernels/kernel_util.h"
 #include "tensorflow/lite/micro/micro_log.h"
+#include "adi_sharcfx_nn.h"
 
 namespace tflite {
 namespace {
@@ -97,12 +98,21 @@ TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
                                tflite::micro::GetTensorShape(output),
                                tflite::micro::GetTensorData<float>(output));
       break;
-    case kTfLiteInt8:
+    case kTfLiteInt8:{
+
+#ifdef DISPLAY_CYCLE_COUNTS
+		cycle_t var = 0, cyc=0; //Variables for cycle counting
+		START_CYCLE_COUNT (var);
+#endif
       reference_ops::Transpose(params, tflite::micro::GetTensorShape(input),
                                tflite::micro::GetTensorData<int8_t>(input),
                                tflite::micro::GetTensorShape(output),
                                tflite::micro::GetTensorData<int8_t>(output));
-      break;
+#ifdef DISPLAY_CYCLE_COUNTS
+	  STOP_CYCLE_COUNT (cyc, var);
+	  PRINT_INFO("\nNumber of cycles to run kTfLiteInt8 Transpose :  %lu\n", cyc);
+#endif
+      break;}
     default:
       MicroPrintf(
           "Type %s is currently not supported by Transpose. "

@@ -16,6 +16,7 @@ limitations under the License.
 #define TENSORFLOW_LITE_MICRO_MICRO_LOG_H_
 
 #include <cstdarg>
+#include "debug.h"
 
 // This is a free function used to perform the actual logging.
 // This function will be used by MicroPrintf and MicroErrorReporter::Report()

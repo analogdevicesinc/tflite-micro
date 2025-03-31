@@ -37,11 +37,22 @@ void Log(const char* format, va_list args) {
 #endif
 }
 
-#if !defined(TF_LITE_STRIP_ERROR_STRINGS)
-void MicroPrintf(const char* format, ...) {
-  va_list args;
-  va_start(args, format);
-  Log(format, args);
-  va_end(args);
-}
+#if !defined(UART_REDIRECT)
+	#if !defined(TF_LITE_STRIP_ERROR_STRINGS)
+		void MicroPrintf(const char* format, ...) {
+		  va_list args;
+		  va_start(args, format);
+		  Log(format, args);
+		  va_end(args);
+		}
+	#endif
+#else
+	#if !defined(TF_LITE_STRIP_ERROR_STRINGS)
+		void MicroPrintf(const char* format, ...) {
+		  va_list args;
+		  va_start(args, format);
+		  PRINT_INFO(format, args);
+		  va_end(args);
+		}
+	#endif
 #endif

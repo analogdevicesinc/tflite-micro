@@ -23,6 +23,7 @@ limitations under the License.
 #include "tensorflow/lite/kernels/op_macros.h"
 #include "tensorflow/lite/micro/kernels/kernel_util.h"
 #include "tensorflow/lite/micro/micro_log.h"
+#include "adi_sharcfx_nn.h"
 
 namespace tflite {
 namespace {
@@ -83,10 +84,19 @@ TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
             tflite::micro::GetTensorShape(output),
             tflite::micro::GetTensorData<int8_t>(output));
       } else {
+#ifdef DISPLAY_CYCLE_COUNTS
+    	cycle_t pre_var_test=0, pre_cyc_test=0;
+		START_CYCLE_COUNT (pre_var_test);
+#endif
         reference_ops::Pad(data->params, tflite::micro::GetTensorShape(input),
                            tflite::micro::GetTensorData<int8_t>(input),
                            &pad_value, tflite::micro::GetTensorShape(output),
                            tflite::micro::GetTensorData<int8_t>(output));
+#ifdef DISPLAY_CYCLE_COUNTS
+
+        STOP_CYCLE_COUNT (pre_cyc_test, pre_var_test);
+		PRINT_INFO("\nNumber of cycles Pad() kTfLiteInt8 else : %lu \n",pre_cyc_test);
+#endif
       }
     } break;
     case kTfLiteInt16: {
