@@ -26,13 +26,16 @@ INCLUDES += \
 	-I"$(ROOT_DIR)/third_party/gemmlowp/internal" \
 	-I"$(ROOT_DIR)/third_party/ruy/ruy/profiler" \
 	-I"$(ROOT_DIR)/third_party/ruy" \
-	-I"$(ROOT_DIR)/third_party/gemmlowp/fixedpoint" 
+	-I"$(ROOT_DIR)/third_party/gemmlowp/fixedpoint"  \
+	-I"./examples/shared" \
+	-I"./adi_sharcfx_nn/Include"
 
 C_SRCS += \
 	$(wildcard $(ROOT_DIR)/third_party/kissfft/tools/*.c) \
 	$(wildcard $(ROOT_DIR)/third_party/kissfft/*.c) \
 	$(wildcard $(ROOT_DIR)/tensorflow/lite/experimental/microfrontend/lib/*.c) \
-	$(wildcard $(ROOT_DIR)/tensorflow/lite/kernels/internal/optimized/*.c)
+	$(wildcard $(ROOT_DIR)/tensorflow/lite/kernels/internal/optimized/*.c) \
+	$(wildcard ./examples/shared/*.c)
 
 CC_SRCS += \
 	$(wildcard $(ROOT_DIR)/tensorflow/lite/schema/*.cc) \
@@ -62,7 +65,7 @@ C_DEPS := $(C_OBJS:.o=.d)
 CC_DEPS := $(CC_OBJS:.o=.d)
 
 ifeq ($(CONFIG), RELEASE)
-	FLAGS = -proc $(TARGET) -si-revision 0.0 -c -O3 -LNO:simd -ffunction-sections -fdata-sections -fno-math-errno -mlongcalls -DCORE1 -DNDEBUG $(INCLUDES) -MMD -MP
+	FLAGS = -proc $(TARGET) -si-revision 0.0 -c -O3 -LNO:simd -ffunction-sections -fdata-sections -fno-math-errno -mlongcalls -DCORE1 -DUART_REDIRECT -DNDEBUG $(INCLUDES) -MMD -MP
 else
 	FLAGS = -proc $(TARGET) -si-revision 0.0 -c -ffunction-sections -fdata-sections -fno-math-errno -mlongcalls -g -DCORE1 -D_DEBUG $(INCLUDES) -MMD -MP
 endif
