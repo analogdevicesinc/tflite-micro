@@ -19,6 +19,8 @@ INCLUDES += \
 	-I"$(TFLM_DIR)/" \
 	-I"$(TFLM_DIR)/third_party/gemmlowp" \
 	-I"$(TFLM_DIR)/third_party/flatbuffers/include" \
+	-I"../examples/shared" \
+	-I"../adi_sharcfx_nn/Include"
 
 C_SRCS += \
 	$(wildcard ./system/sru/*.c) \
@@ -92,11 +94,14 @@ pre-build:
 	-@echo '[CP] Copy Library'
 	@cp ../build/libTFLM.a ${BUILD_DIR}/lib/libTFLM.a
 	-@echo '[CP] ../build/libTFLM.a ${BUILD_DIR}/lib/libTFLM.a'
+	@cp ../adi_sharcfx_nn/Lib/Release/libadi_sharcfx_nn.a ${BUILD_DIR}/lib/libadi_sharcfx_nn.a
+	-@echo '[CP] ../build//libadi_sharcfx_nn.a ${BUILD_DIR}/lib//libadi_sharcfx_nn.a'
 
 main-build: $(BUILD_DIR)/$(UNIT_TEST_DXE)
 
 $(BUILD_DIR)/$(UNIT_TEST_DXE):  $(USER_OBJS) $(LSP_SRCS) $(SRC_OBJS)
 	@echo "\"-lTFLM\"" >> $(OBJ_LIST)
+	@echo "\"-ladi_sharcfx_nn\"" >> $(OBJ_LIST)
 	@echo '[CX] Building target: $@'
 	@echo '[CX] Invoking: CrossCore SHARC-FX C++ Linker'
 	@$(CCFX++) $(DXE_FLAGS)
