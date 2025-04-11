@@ -27,7 +27,39 @@ jobs:
         - name: Build libTFLM using CCES ${{ matrix.cces_ver }}
           shell: bash
           run: 
-            make -j4 CCES=${{ env.CCES_PATH }}
+            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
+
+        - name: Build libadi_sharcfx_nn using CCES ${{ matrix.cces_ver }}
+          shell: bash
+          run: |
+            cd adi_sharcfx_nn/Project
+            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
+
+        - name: Build denoiser example project
+          shell: bash
+          run: |
+            cd Utils/automated-model-conversion/dtln
+            bash convert_models.sh
+            cd ../../../examples/denoiser/denoiser_fileio
+            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
+            cd ../denoiser_realtime
+            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
+
+        - name: Build kws example project
+          shell: bash
+          run: |
+            cd examples/keyword_spotter/kws_fileio
+            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
+            cd ../kws_realtime
+            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
+
+        - name: Build genre_id example project
+          shell: bash
+          run: |
+            cd Utils/automated-model-conversion/genre_identification
+            bash convert_models.sh
+            cd ../../../examples/genre_identification/genre_id_fileio
+            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
 
         - name: Test libTFLM artifact using CCES ${{ matrix.cces_ver }}
           shell: bash
