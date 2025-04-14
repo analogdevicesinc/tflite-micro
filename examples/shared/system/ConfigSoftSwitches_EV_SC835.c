@@ -18,7 +18,7 @@ agree to the terms of the associated Analog Devices License Agreement.
  *
  */
 
-#include <drivers\twi\adi_twi_v2.h>
+#include <drivers/twi/adi_twi_v2.h>
 #include "debug.h"
 
 /* TWI settings */
