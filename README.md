@@ -60,7 +60,10 @@ To build the project, you will need to download and install the following softwa
 # Building the example application
 
 ### About the example applications
-The [examples](examples) folder includes the SHARC-FX port for the DTLN(Dual-signal Transformation LSTM Network) denoiser application. This example utilizes the ADAU1979 ADC and the ADAU1962A DAC to operate in I2S mode for audio talkthrough that has been leveraged to run the DTLN denoiser in realtime. 
+The [examples](examples) folder includes the SHARC-FX port for the following applications:
+ * [DTLN (Dual-signal Transformation LSTM Network) denoiser](examples/denoiser)
+ * [CNN genre identification](examples/genre_identification)
+ * [DS-CNN keyword spotting](examples/keyword_spotter)
 
 Building the example application is a two-stage process. First, you will need to build the static library archive (`libTFLM.a`). The generated library archive is then linked and built together with the example application project to create the executable file. To illustrate: 
 
@@ -93,33 +96,52 @@ Next, build the `libTFLM.a` file:
 At this point, you should have a `libTFLM.a` library archive located inside the `Debug` or `Release` folder.
 
 Instructions to build and run the examples are found in their respective READMEs.
-- [Denoiser Real-time](examples/denoiser_realtime/README.md)
-- [Denoiser File I/O](examples/denoiser_fileio/README.md)
+- [Denoiser](examples/denoiser/README.md)
+- [Keyword Spotting](examples/keyword_spotter/README.md)
+- [Genre Identification](examples/genre_identification/README.md)
 
-We have also included utilities for automated model conversion for the DTLN model. These are available in the [utils](Utils) directory. 
-- [Automated model conversion for DTLN](Utils/automated-model-conversion-dtln/README.md)
-
+We have also included utilities for automated model conversion and flashing. These are available in the [utils](Utils) directory. 
+- [Automated model conversion for DTLN](Utils/automated-model-conversion/dtln/README.md)
+- [Automated model conversion for Genre ID](Utils/automated-model-conversion/genre_identification/README.md)
+- [Flashing](Utils/flashing-tools/README.md)
 
 ### Option 2: via the Headless build 
 
-We also provide a CLI-based build workflow that is equivalent to the IDE-based workflow in the CCES ecosystem. At the monent, the headless interface only supports the building `libTFLM.a` library archive. Support to build the examples and generate the *.dxe executables will be included in future releases. 
+We also provide a CLI-based build workflow that is equivalent to the IDE-based workflow in the CCES ecosystem. The headless interface supports building the `libTFLM.a` library archive.
 
 To build the library archive for TFLM with the optimized kernels, run make on the top-level directory:
 ```
 make
 ```
 
-By default, the build script uses `/c/analog/cces` as the CCES search path for the SHARC-FX toolchains and the default target is for the [ADSP-SC835](https://www.analog.com/en/products/adsp-sc835.html). </br> `RELEASE` is the default configuration but you may also select to `DEBUG` configuration mode.
+By default, the build script uses `/c/analog/cces` as the search path for the SHARC-FX toolchains and the default target is for the [ADSP-SC835](https://www.analog.com/en/products/adsp-sc835.html). </br> `RELEASE` is the default configuration but you may also select to `DEBUG` configuration mode.
 
 To configure these, run
 ```
-make CCES=</path/to/cces> TARGET=<DEVICE_NAME> CONFIG=<CONFIG_MODE>
+make SHARCFX_ROOT=</path/to/cces> DEVICE=<DEVICE_NAME> CONFIG=<CONFIG_MODE>
 ```
+
 The script will output a `./build/libTFLM.a` library which can be linked to other projects using the `-lTFLM` flag. 
 
 Build objects are stored in the `./build` directory. To remove these, run
 ```
 make clean
+```
+
+The headless interface also allows building and flashing an example project. To build an example application:
+```
+cd examples/<example_project>/<example_realtime|fileio>
+make
+```
+
+To flash to the board with a debugger, run
+```
+make flash
+```
+
+The default debugger is ICE-1000. To configure this with other debugger like the ICE-2000, run
+```
+make flash DEBUGGER=2000
 ```
 
 # Getting Help
