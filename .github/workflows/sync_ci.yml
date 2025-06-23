@@ -1,6 +1,8 @@
 name: Sync tflite-micro and Create PR
 
 on:
+  schedule:
+    - cron: "0 0 1 * *" # Runs at midnight on the first day of every month
   workflow_dispatch: # manual trigger
 
 jobs:
