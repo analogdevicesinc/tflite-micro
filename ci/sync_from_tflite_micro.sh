@@ -26,6 +26,7 @@ echo "Copying TFLM source files to ${TFLITE_LIB_DIR}"
 cd "${TFLITE_LIB_DIR}"
 rm -rf TFLM/src/tensorflow
 rm -rf TFLM/src/third_party
+mkdir -p TFLM/src/tensorflow
 mv "${TEMP_DIR}/tflm-out/tensorflow" TFLM/src/tensorflow
 mkdir -p TFLM/src/third_party/
 /bin/cp -r "${TEMP_DIR}"/tflm-out/third_party/* TFLM/src/third_party/
