@@ -1,8 +1,8 @@
 # Set up roots/directories
 SHARCFX_ROOT := C:/analog/cces/3.0.2
 SHARCFX_ROOT_VER := $(shell echo $(SHARCFX_ROOT) | grep -oP '\d+\.\d+\.\d+')
-TFLM_ROOT := ../../../TFLM/src
-NN_ROOT := ../../../adi_sharcfx_nn
+TFLM_ROOT := ../../../../
+NN_ROOT := ../../../../adi_sharcfx_nn
 SYSCFG_RDIR := Xtensa/SHARC-FX/lib/src
 SYSCFG_DIR := $(SHARCFX_ROOT)/$(SYSCFG_RDIR)
 DRIVER_DIR := $(SYSCFG_DIR)/drivers
@@ -20,4 +20,4 @@ CLDP := $(SHARCFX_ROOT)/cldp
 
 # Set up default variables
 DEVICE := ADSP-SC835
-CONFIG := RELEASE
+CONFIG := Release

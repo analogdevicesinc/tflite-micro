@@ -1,1 +1,0 @@
-Library file will be placed in this folder after build

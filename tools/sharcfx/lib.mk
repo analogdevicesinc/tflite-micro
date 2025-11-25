@@ -10,7 +10,7 @@ CPP_OBJS = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(subst ./,,$(CPP_SRCS)))
 SRC_OBJS = $(C_OBJS) $(CC_OBJS) $(CPP_OBJS)
 
 # Initialize flags
-ifeq ($(CONFIG), RELEASE)
+ifeq ($(CONFIG), Release)
 	FLAGS = -proc $(DEVICE) -si-revision 0.0 -c -O3 -LNO:simd -ffunction-sections -fdata-sections -fno-math-errno -mlongcalls -DCORE1 -DUART_REDIRECT -DNDEBUG $(INCLUDES) -MMD -MP
 	CFG_DIR = Release
 else
@@ -38,8 +38,8 @@ $(LIB_BUILD): $(SRC_OBJS)
 	@$(AR) -r $(LIB_BUILD) @$(OBJ_LIST)
 	@echo
 	@echo '[AR] Done. See $(LIB_BUILD)'
-	@cp $(LIB_BUILD) $(LIB_SRCS)/../Lib/$(CFG_DIR)/$(LIB)
-	@echo '[CP] $(LIB_BUILD) -> $(LIB_SRCS)/../Lib/$(CFG_DIR)/$(LIB)'
+	@cp $(LIB_BUILD) $(TARGET_LIB_DIR)/$(CFG_DIR)/$(LIB)
+	@echo '[CP] $(LIB_BUILD) -> $(TARGET_LIB_DIR)/$(CFG_DIR)/$(LIB)'
 
 $(BUILD_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)

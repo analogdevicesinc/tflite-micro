@@ -1,8 +1,9 @@
 include ./tools/sharcfx/sharcfx.mk
 
 BUILD_DIR := ./build
-LIB_SRCS := ./TFLM/src
+LIB_SRCS := .
 LIB := libTFLM.a
+TARGET_LIB_DIR := $(LIB_SRCS)/cces/TFLM/Lib
 
 INCLUDES += \
 	-I"$(LIB_SRCS)" \
@@ -17,7 +18,7 @@ INCLUDES += \
 	-I"$(LIB_SRCS)/third_party/ruy/ruy/profiler" \
 	-I"$(LIB_SRCS)/third_party/ruy" \
 	-I"$(LIB_SRCS)/third_party/gemmlowp/fixedpoint"  \
-	-I"./examples/shared" \
+	-I"./cces/examples/shared" \
 	-I"./adi_sharcfx_nn/Include"
 
 C_SRCS += \
@@ -25,7 +26,7 @@ C_SRCS += \
 	$(wildcard $(LIB_SRCS)/third_party/kissfft/*.c) \
 	$(wildcard $(LIB_SRCS)/tensorflow/lite/experimental/microfrontend/lib/*.c) \
 	$(wildcard $(LIB_SRCS)/tensorflow/lite/kernels/internal/optimized/*.c) \
-	$(wildcard ./examples/shared/*.c)
+	$(wildcard ./cces/examples/shared/*.c)
 
 CC_SRCS += \
 	$(wildcard $(LIB_SRCS)/tensorflow/lite/schema/*.cc) \

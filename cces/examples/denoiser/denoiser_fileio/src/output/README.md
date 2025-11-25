@@ -1,0 +1,2 @@
+This folder should contain the output denoised_audio.bin file generated after running the file io application.
+Please follow the Readme in `cces\Utils\data\denoiser` to convert bin to wav file and hear it back.

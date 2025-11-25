@@ -96,14 +96,15 @@ Next, build the `libTFLM.a` file:
 At this point, you should have a `libTFLM.a` library archive located inside the `Debug` or `Release` folder.
 
 Instructions to build and run the examples are found in their respective READMEs.
-- [Denoiser](examples/denoiser/README.md)
-- [Keyword Spotting](examples/keyword_spotter/README.md)
-- [Genre Identification](examples/genre_identification/README.md)
+- [Denoiser](cces/examples/denoiser/README.md)
+- [Keyword Spotting](cces/examples/keyword_spotter/README.md)
+- [Genre Identification](cces/examples/genre_identification/README.md)
+- [Urban Sound Classification](cces/examples/urbansound_classification/README.md)
 
-We have also included utilities for automated model conversion and flashing. These are available in the [utils](Utils) directory. 
-- [Automated model conversion for DTLN](Utils/automated-model-conversion/dtln/README.md)
-- [Automated model conversion for Genre ID](Utils/automated-model-conversion/genre_identification/README.md)
-- [Flashing](Utils/flashing-tools/README.md)
+We have also included utilities for automated model conversion and flashing. These are available in the [Utils](cces/Utils) directory. 
+- [Automated model conversion for DTLN](cces/Utils/automated-model-conversion/dtln/README.md)
+- [Automated model conversion for Genre ID](cces/Utils/automated-model-conversion/genre_identification/README.md)
+- [Flashing](cces/Utils/flashing-tools/README.md)
 
 ### Option 2: via the Headless build 
 
@@ -143,6 +144,14 @@ The default debugger is ICE-1000. To configure this with other debugger like the
 ```
 make flash DEBUGGER=2000
 ```
+
+### Multi-boot
+Please follow [bootloader_sharcfx](cces/Utils/flashing-tools/bootloader_sharcfx) for multi-stage booting functionality.
+
+Please note that the models we use in the example applications are for DEMO purpose only. If a product needs to be created using the same models, commercial license needs to be taken, and the necessary due diligence needs to be handled by the party with the rightful owners.
+
+APPENDIX A - THIRD PARTY LICENSES FOR OPEN-SOURCE COMPONENTS ARE DETAILED AT THE LOCATION BELOW:
+ * HTTPS://DOWNLOAD.ANALOG.COM/SHARC-FX-TFLM-EDGE-AI-SDK/VERSIONS.HTML [https://download.analog.com/sharc-fx-tflm-edge-ai-sdk/versions.html]
 
 # Getting Help
 

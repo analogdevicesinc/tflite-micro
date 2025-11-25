@@ -1,0 +1,3 @@
+[submodule "adi_sharcfx_nn"]
+	path = adi_sharcfx_nn
+	url = https://github.com/analogdevicesinc/nn.git
