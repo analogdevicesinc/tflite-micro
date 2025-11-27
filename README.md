@@ -150,6 +150,9 @@ Please follow [bootloader_sharcfx](cces/Utils/flashing-tools/bootloader_sharcfx)
 
 Please note that the models we use in the example applications are for DEMO purpose only. If a product needs to be created using the same models, commercial license needs to be taken, and the necessary due diligence needs to be handled by the party with the rightful owners.
 
+## Datasets
+CC BY 4.0 compliant datasets for Urban Sound Classification and Music Genre Identification are available upon request for evaluation and training.
+
 APPENDIX A - THIRD PARTY LICENSES FOR OPEN-SOURCE COMPONENTS ARE DETAILED AT THE LOCATION BELOW:
  * HTTPS://DOWNLOAD.ANALOG.COM/SHARC-FX-TFLM-EDGE-AI-SDK/VERSIONS.HTML [https://download.analog.com/sharc-fx-tflm-edge-ai-sdk/versions.html]
 
