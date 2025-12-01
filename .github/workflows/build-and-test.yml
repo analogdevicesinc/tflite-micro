@@ -6,16 +6,17 @@ on:
   push:
   pull_request:
     branches:
+      - 'release/**'
       - main
-      - dev
 
 jobs:
   Build-and-Test:
-    runs-on: self-hosted
+    runs-on: [self-hosted, tflm-runner]
     strategy:
       fail-fast: false
       matrix:
         cces_ver: ["3.0.0", "3.0.2"]
+        config: ["Release", "Debug"]
     container: 
         image: tagoylo/tflm-ci:latest
         volumes: 
@@ -24,48 +25,68 @@ jobs:
       CCES_PATH: /opt/analog/cces/${{ matrix.cces_ver }}
     steps:
         - uses: actions/checkout@v4
-        - name: Build libTFLM using CCES ${{ matrix.cces_ver }}
-          shell: bash
-          run: 
-            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
+          with:
+            submodules: recursive
+            token: ${{ secrets.GH_PAT }}
 
         - name: Build libadi_sharcfx_nn using CCES ${{ matrix.cces_ver }}
           shell: bash
           run: |
             cd adi_sharcfx_nn/Project
-            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
+            make -j4 CONFIG=${{ matrix.config }} SHARCFX_ROOT=${{ env.CCES_PATH }}
+
+        - name: Build libTFLM using CCES ${{ matrix.cces_ver }}
+          shell: bash
+          run: 
+            make -j4 CONFIG=${{ matrix.config }} SHARCFX_ROOT=${{ env.CCES_PATH }}
 
         - name: Build denoiser example project
           shell: bash
           run: |
-            cd Utils/automated-model-conversion/dtln
-            bash convert_models.sh
-            cd ../../../examples/denoiser/denoiser_fileio
-            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
+            cd cces/Utils/automated-model-conversion/dtln
+            chmod +x run_in_bash.sh
+            bash run_in_bash.sh
+            cd ../../../..
+            cd cces/examples/denoiser/denoiser_fileio
+            make -j4 CONFIG=${{ matrix.config }} SHARCFX_ROOT=${{ env.CCES_PATH }}
             cd ../denoiser_realtime
-            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
+            make -j4 CONFIG=${{ matrix.config }} SHARCFX_ROOT=${{ env.CCES_PATH }}
 
         - name: Build kws example project
           shell: bash
           run: |
-            cd examples/keyword_spotter/kws_fileio
-            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
+            cd cces/examples/keyword_spotter/kws_fileio
+            make -j4 CONFIG=${{ matrix.config }} SHARCFX_ROOT=${{ env.CCES_PATH }}
             cd ../kws_realtime
-            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
+            make -j4 CONFIG=${{ matrix.config }} SHARCFX_ROOT=${{ env.CCES_PATH }}
 
         - name: Build genre_id example project
           shell: bash
           run: |
-            cd Utils/automated-model-conversion/genre_identification
-            bash convert_models.sh
-            cd ../../../examples/genre_identification/genre_id_fileio
-            make -j4 SHARCFX_ROOT=${{ env.CCES_PATH }}
+            cd cces/examples/genre_identification/genre_id_fileio
+            make -j4 CONFIG=${{ matrix.config }} SHARCFX_ROOT=${{ env.CCES_PATH }}
+            cd ../genre_id_realtime
+            make -j4 CONFIG=${{ matrix.config }} SHARCFX_ROOT=${{ env.CCES_PATH }}
 
+        - name: Build urbansound_classification example project
+          shell: bash
+          run: |
+            cd cces/examples/urbansound_classification/urbansound_id_fileio
+            make -j4 CONFIG=${{ matrix.config }} SHARCFX_ROOT=${{ env.CCES_PATH }}
+            cd ../urbansound_id_realtime
+            make -j4 CONFIG=${{ matrix.config }} SHARCFX_ROOT=${{ env.CCES_PATH }}
+
+        - name: Build bootloader_sharcfx project
+          shell: bash
+          run: |
+            cd cces/Utils/flashing-tools/bootloader_sharcfx
+            make -j4 CONFIG=${{ matrix.config }} SHARCFX_ROOT=${{ env.CCES_PATH }}
+            
         - name: Test libTFLM artifact using CCES ${{ matrix.cces_ver }}
           shell: bash
           run: |
-            cd unit_test
-            make -j4 CCES=${{ env.CCES_PATH }} | tee test_results.log
+            cd test/unit_test
+            make -j4 CONFIG=${{ matrix.config }} CCES=${{ env.CCES_PATH }} | tee test_results.log
             if grep -q "FAILED" test_results.log; then
               echo "Unit test failed"
               exit 1
@@ -91,7 +112,7 @@ jobs:
             COMMIT_HASH=${GITHUB_SHA::7}
             UPLOAD_PATH="TFLM/${FOLDER_NAME}/build_${{ github.run_number }}-${BUILD_DATE}-${COMMIT_HASH}/${{ matrix.cces_ver }}"
             echo "Uploading test results to JF: ${{ env.JF_URL }}/$UPLOAD_PATH"
-            TEST_FILE_PATH="./unit_test/test_results.log"
+            TEST_FILE_PATH="./test/unit_test/test_results.log"
             curl -u${{ env.JF_ACCESS_TOKEN }} -T ${TEST_FILE_PATH} ${{ env.JF_URL }}/${UPLOAD_PATH}/ > /dev/null
             BUILD_FILE_PATH="./build/libTFLM.a"
             echo "Uploading build artifact to JF: ${{ env.JF_URL }}/$UPLOAD_PATH"

@@ -1,2 +1,0 @@
-This folder should contain the output denoised_audio.bin file generated after running the file io application.
-Please follow the Readme in `Eagle-TFLM\Utils\data\denoiser` to convert ti to wav file and hear it back.

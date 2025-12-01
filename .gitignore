@@ -4,3 +4,32 @@ env
 .env
 build
 tmp
+# Ignore Git internal folder (redundant; Git never tracks this, but for clarity)
+.git/
+
+# Ignore metadata
+.metadata/
+
+# Ignore *.ignore files and folders
+*.ignore
+*.ignore/
+
+# Ignore all build-related folders
+**/build/
+**/Build/
+**/BUILD/
+
+# Ignore Debug and Release folders (case-insensitive)
+**/Debug/
+**/debug/
+**/Release/
+**/release/
+
+# Ignore temporary folders
+tmp/
+
+# Allow Debug and Release folders in specific paths
+!Lib/Debug/
+!Lib/Release/
+!cces/TFLM/lib/Debug/
+!cces/TFLM/lib/Release/
