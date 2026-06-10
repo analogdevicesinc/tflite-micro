@@ -8,14 +8,13 @@ The model is a modified version of VGG16 conv model. The model takes in audio da
 ## Additional details
 |Content|Supported?|
 |:--------|:----------:|
-|float model|✅|
 |int8 quantized model|✅|
 |FileIO operation |✅|
 |Realtime operation |✅|
 
 ## Model file generation
-* Model files in `common/model/int8_genre_ID` and `common/model/float_genre_ID` are required to build and run the application. Absence of .cc and .h files in this folder will lead to build errors.
-* Follow the steps mentioned in the README file in `cces\Utils\automated-model-conversion\genre_identification` to generate the models for the application. The batch script will download, convert the float32 and int8 models and place them in the relevant locations for the project to access it. 
+* Model files in `common/model/int8_genre_ID` is required to build and run the application. Absence of .cc and .h files in this folder will lead to build errors.
+* Follow the steps mentioned in the README file in `cces\Utils\automated-model-conversion\genre_identification` to generate the models for the application. The batch script will download and convert the int8 models and place them in the relevant locations for the project to access it. 
 * This is the first step to run the `genre_id_fileio` or the `genre_id_realtime` project. It needs to be done only once for genre_identification application.
 
 ## Data Input/Output generation
@@ -24,10 +23,10 @@ The model is a modified version of VGG16 conv model. The model takes in audio da
 * Expected Output: The detected genre for the input sample will be printed on the console at every ~3 seconds. 
 
 ##  Run application in FileIO mode
-* Follow the steps mentioned in the README file in `cces\Utils\automated-model-conversion\genre_identification\` to generate the models for the application. The batch script will download, convert both the int8 and float32 models and place them in the relevant locations for the project to access it. In our case in "genre-identification\common\model" folder.
+* Follow the steps mentioned in the README file in `cces\Utils\automated-model-conversion\genre_identification\` to generate the models for the application. The batch script will download and convert the int8 models and place them in the relevant locations for the project to access it. In our case in "genre-identification\common\model" folder.
 * Open CCES and import the **genre_id_fileio** project into your CCES workspace. 
 * Build and run the **genre_id_fileio** project. Refer to the `ADI_TFLITE_MICRO_SHARCFX_UsersGuide.doc` for more information on how to build and run a project. 
-* By default, the int8 model will be enabled to run. To use the float32 model instead, the **`DO_QUANTIZED_INFERENCE`** macro in `src\adi_run_genre_id.cpp` needs to be disabled.
+* By default, the int8 model will be used to run.
 
 
 ##  Run application in Realtime mode

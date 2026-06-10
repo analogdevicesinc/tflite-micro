@@ -18,7 +18,7 @@ The TFLite Micro Library for SHARC-FX is built upon the TensorFlow Lite Micro fr
 Our optimized implementation of this framework is designed to specifically run on ADI’s SHARC-FX line of processors. Currently, this contains support for the following devices.
 -	[ADSP-SC835 Datasheet and Product Info | Analog Devices](https://www.analog.com/en/products/adsp-sc835.html)
 
-This codebase was tested with CrossCore Embedded Studio >3.0.0 on a Windows 10 host machine. For information about the CrossCore Embedded Studio tool chain refer to [www.analog.com/cces](www.analog.com/cces). For more information on the latest ADI processors, technical support and any other additional information, please visit our website at [http://www.analog.com/processors](http://www.analog.com/processors).
+This codebase was tested with CrossCore Embedded Studio >3.0.0 on a Windows 10 host machine. For information about the CrossCore Embedded Studio tool chain refer to [www.analog.com/cces](https://www.analog.com/cces). For more information on the latest ADI processors, technical support and any other additional information, please visit our website at [http://www.analog.com/processors](http://www.analog.com/processors).
 
 # Prerequisites and System Setup
 
@@ -60,10 +60,10 @@ To build the project, you will need to download and install the following softwa
 # Building the example application
 
 ### About the example applications
-The [examples](examples) folder includes the SHARC-FX port for the following applications:
- * [DTLN (Dual-signal Transformation LSTM Network) denoiser](examples/denoiser)
- * [CNN genre identification](examples/genre_identification)
- * [DS-CNN keyword spotting](examples/keyword_spotter)
+The [examples](cces/examples) folder includes the SHARC-FX port for the following applications:
+ * [DTLN (Dual-signal Transformation LSTM Network) denoiser](cces/examples/denoiser)
+ * [CNN genre identification](cces/examples/genre_identification)
+ * [DS-CNN keyword spotting](cces/examples/keyword_spotter)
 
 Building the example application is a two-stage process. First, you will need to build the static library archive (`libTFLM.a`). The generated library archive is then linked and built together with the example application project to create the executable file. To illustrate: 
 
@@ -82,7 +82,7 @@ First, open the project on CCES:
 
 1. Open the project by choosing the *File > Import* in CrossCore Embedded Studio. 
 2. In the *Import* window, select *Existing Projects* into Workspace and click *Next*. 
-3. In the next window, click *Browse* and provide the path to the [examples](examples) directory as the *Select root* directory. 
+3. In the next window, click *Browse* and provide the path to the [examples](cces/examples) directory as the *Select root* directory. 
 4. Select any of the projects and click *Finish*. 
 5. You will see the opened project in the IDE’s Project Explorer.
 

@@ -19,7 +19,7 @@ This example shows how to run inference using TensorFlow Lite Micro (TFLM) for w
 * Audio samples for use with Micro Speech models must be 1000ms in length, 16-bit PCM samples, and single channel (mono). 
 * Expected Input: Requires audio samples into C++ data structure (micro_speech_audio_data.cc and micro_speech_audio_data.h) in `src\testdata` folder.
 * A tool is available to convert your custom audio samples into C++ data structures that you can then use in your own wake-word application. 
-* The tool can be found in the Utils folder: `cces\Utils\data\scripts\generate_cc_arrays.py`. Please follow the Readme `cces\Utils\data\micro-speech\` to generate the input file for testing the application.
+* The tool can be found in the Utils folder: `cces\Utils\data\scripts\generate_cc_arrays.py`. Please follow the Readme `cces\Utils\data\micro_speech\` to generate the input file for testing the application.
 * Expected output : The detected class of keyword(yes/no) from sample input will be printed to console.
 
 
