@@ -11,6 +11,10 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+Portions Copyright (C) 2023 Analog Devices, Inc. All Rights Reserved.
+Modifications: Integrated adi_sharcfx_* hardware-optimized kernel calls
+for SHARC-FX hardware acceleration.
 ==============================================================================*/
 
 // Integer version of unidirectional sequence lstm. Only the standard LSTM

@@ -13,3 +13,6 @@ Run the `run_in_bash.sh` file to generate the float quantized model files for DT
 
 The generated model files will be populated in the `cces\examples\denoiser\common\model\`
 Model files in `cces\examples\denoiser\common\model\model_fp` are required to build and run the application. Absence of .cc and .h files in this folder will lead to build errors.
+
+> **Note:** The DTLN model uses float32 (no INT8 quantization). Weight reordering via
+> `reorder_weights_fc_and_conv1x1.py` is not required for this project.

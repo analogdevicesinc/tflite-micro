@@ -11,6 +11,10 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+Portions Copyright (C) 2023 Analog Devices, Inc. All Rights Reserved.
+Modifications: Integrated adi_sharcfx_* hardware-optimized kernel calls
+for SHARC-FX hardware acceleration.
 ==============================================================================*/
 
 #include "tensorflow/lite/kernels/internal/reference/integer_ops/logistic.h"
@@ -83,7 +87,7 @@ TfLiteStatus LogisticEval(TfLiteContext* context, TfLiteNode* node) {
 #endif
 #ifdef DISPLAY_CYCLE_COUNTS
 		  STOP_CYCLE_COUNT (cyc, var);
-		  printf("\tNumber of cycles to run Logistic(INT_16) : \t%ld \n", cyc);
+		  MicroPrintf("\tNumber of cycles to run Logistic(INT_16) : \t%ld \n", cyc);
 #endif
         return kTfLiteOk;
       }
@@ -121,7 +125,7 @@ TfLiteStatus LogisticEval(TfLiteContext* context, TfLiteNode* node) {
 #endif
 #ifdef DISPLAY_CYCLE_COUNTS
 		  STOP_CYCLE_COUNT (cyc, var);
-		  printf("\tNumber of cycles to run Logistic(INT_8) : \t%ld \n", cyc);
+		  MicroPrintf("\tNumber of cycles to run Logistic(INT_8) : \t%ld \n", cyc);
 #endif
         return kTfLiteOk;
       }

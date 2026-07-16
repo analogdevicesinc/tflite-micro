@@ -11,6 +11,10 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+Portions Copyright (C) 2023 Analog Devices, Inc. All Rights Reserved.
+Modifications: Integrated adi_sharcfx_* hardware-optimized kernel calls
+for SHARC-FX hardware acceleration.
 ==============================================================================*/
 
 #include "tensorflow/lite/micro/kernels/fully_connected.h"
@@ -166,6 +170,23 @@ TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
           RuntimeShape input_shape = tflite::micro::GetTensorShape(input);
           RuntimeShape filter_shape = tflite::micro::GetTensorShape(filter);
           RuntimeShape output_shape = tflite::micro::GetTensorShape(output);
+#ifdef USE_REORDERED_WEIGHTS_SCHEME
+          adi_sharcfx_fully_connected_int8_reordered_weights(
+            tflite::micro::GetTensorData<int8_t>(input),
+            tflite::micro::GetTensorData<int8_t>(filter),
+            tflite::micro::GetOptionalTensorData<int32_t>(bias),
+            tflite::micro::GetTensorData<int8_t>(output),
+            filter_shape.Dims(filter_shape.DimensionsCount()-1),                    //filter_shape.Dims(filter_dim_count - 1),;
+            output_shape.Dims(output_shape.DimensionsCount() - 1),
+            FlatSizeSkipDim(output_shape, output_shape.DimensionsCount() - 1),//batches
+            params_read.output_multiplier,
+            params_read.output_shift,
+            params_read.input_offset,
+            params_read.weights_offset,
+            params_read.output_offset,
+            params_read.quantized_activation_min,
+            params_read.quantized_activation_max);
+#else
           adi_sharcfx_fully_connected_int8(
             tflite::micro::GetTensorData<int8_t>(input),
             tflite::micro::GetTensorData<int8_t>(filter),
@@ -181,6 +202,7 @@ TfLiteStatus Eval(TfLiteContext* context, TfLiteNode* node) {
             params_read.output_offset,
             params_read.quantized_activation_min,
             params_read.quantized_activation_max);
+#endif
 #endif
 #ifdef DISPLAY_CYCLE_COUNTS
           STOP_CYCLE_COUNT (cyc, var);

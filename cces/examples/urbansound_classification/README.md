@@ -13,7 +13,7 @@ The model is a modified version of VGG16 conv model. The model takes in audio da
 |Realtime operation |✅|
 
 ## Model file
-* Model files in `common/model/int8_urbansound_class_ID` is required to build and run the application. Absence of .cc and .h files in this folder will lead to build errors.
+* Model files in `common/model/int8_urbansound_ID` is required to build and run the application. Absence of .cc and .h files in this folder will lead to build errors.
 * This is the first step to run the `urbansound_id_fileio` or the `urbansound_id_realtime` project. It needs to be done only once for urbansound_classification application.
 
 ## Data Input/Output generation
@@ -68,6 +68,7 @@ The model is a modified version of VGG16 conv model. The model takes in audio da
 * Once the application has been sucessfully loaded, an audio wav file can be played on the laptop/PC connected to the ADSPSC8xx and ADSP218xx board and the input can be suppplied by the cable connected to J12. We combine both the stereo inputs and run through the urbansound_classification. The urbansound_classification input is played back through both channels of the output device connected to J17.  
 * The ADC and DAC are configured at 48KHz, data is passed via ADC to the urbansound-identification model and then the output of 48KHz is played back from the DAC. 
 * The urbansound_classification output will be displayed on the UART serial terminal. 
+* The default model used for running in FP32. You can switch to int16 activations/int8 weights model by enabling the macro 'DO_QUANTIZED_INFERENCE' present in 'src/adi_run_urbansound_id.cpp'
 * UART REDIRECTION support is added for realtime applications. By default UART REDIRECTION is enabled for realtime application with UART_REDIRECT macro in project settings. 
 * When UART_REDIRECT is enabled the output for urbansound_classification is displayed on a serial Terminal(example, Termite), otherwise its displayed on the debugger IDE console window, example CCES console.
 * Expected Input: Follow the Readme in `cces\Utils\data\urbansound_classification` to download and use the input file. You can use any custom music file of your choise for testing.

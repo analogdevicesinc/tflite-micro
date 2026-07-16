@@ -1,152 +1,73 @@
-<!--
-SPDX-FileCopyrightText: 2025 Analog Devices Inc.
-SPDX-License-Identifier: Apache-2.0
--->
+# TFLM for SHARC-FX
+This contains the TFLM port for SHARC-FX.
 
-# Tensorflow Lite for Microcontrollers
+This contains code from [TFLM master branch](https://github.com/tensorflow/tflite-micro/tree/main) as of July 2023[[commit](https://github.com/tensorflow/tflite-micro/commit/aa945a0fc6359a1ed8ecc2ca518fedcb35a7863b)]. This was created following the instructions from https://github.com/tensorflow/tflite-micro/blob/main/tensorflow/lite/micro/docs/new_platform_support.md specifically for the codes gotten from Step 1: Build TFLM Static Library with Reference Kernels.
 
-This repository contains for the TensorFlow Lite for Microcontrollers port supporting ADI microcontrollers and digital signal processors. 
+The library and example projects were created manually with adding compiler options to enable C++11 support in the clang compiler i.e. -std=c11 and -std=c++11 options for compiler and -lstdc++11 for linker. 
+Custom TFLM models will need to be converted with TF2.17 or below for reliable inference across python and C++. Our current version of TFLM does not support per-channel quantization in Linear layers.
 
-# License
-
-This project is covered under the [Apache License 2.0](LICENSE).
-
-# Overview
-
-The TFLite Micro Library for SHARC-FX is built upon the TensorFlow Lite Micro framework developed by Google. You can read more about this framework [here](https://www.tensorflow.org/lite/microcontrollers). The product consists of the TFLite Micro library for SHARC-FX, sample applications and associated documents. This repository contains code from TFLM master branch as of [July 2023](https://github.com/tensorflow/tflite-micro/tree/main). This port was created following the [new platform support instructions](https://github.com/tensorflow/tflite-micro/blob/main/tensorflow/lite/micro/docs/new_platform_support.md). 
-
-Our optimized implementation of this framework is designed to specifically run on ADI’s SHARC-FX line of processors. Currently, this contains support for the following devices.
--	[ADSP-SC835 Datasheet and Product Info | Analog Devices](https://www.analog.com/en/products/adsp-sc835.html)
-
-This codebase was tested with CrossCore Embedded Studio >3.0.0 on a Windows 10 host machine. For information about the CrossCore Embedded Studio tool chain refer to [www.analog.com/cces](https://www.analog.com/cces). For more information on the latest ADI processors, technical support and any other additional information, please visit our website at [http://www.analog.com/processors](http://www.analog.com/processors).
-
-# Prerequisites and System Setup
-
-## Required Hardware
-You will need the following hardware:
-
-1. [Analog Devices ADSP-SC835W-SOM](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/adspsc835w-ev-som.html) - This is a small board containing the SC835 processor (SHARC-FX + M33) and JTAG.
-2. [Analog Devices EV-SOMCRR-EZKIT](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ev-somcrr-ezkit.html) - This adapter board provides all of the peripherals for the denoiser application.
-3. [ICE-1000 or ICE-2000](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/emulators.html) - An in-circuit emulator used to debug and download the application to the processor.
-4. USB cable with USB A and Micro USB-B connectors (for ICE connection)
-5. USB cable with Type A connectors (for carrier board connection)
-6. USB cable with Type C connectors (for SOM board connection)
-7. 12 V AC adaptor to Power EV-SOMCRR-EZKIT board
-
-## Hardware Setup and Connection Diagram
-
-You have the option to power the board via USB or from an AC-DC power supply. The diagrams below show the connections for these two power options. Please take that the JP1 jumper setting changes depending on the power source used. 
-
-<img src="Documents/block-diagram-usbpower.jpg" width="500" alt_text="block-diagram-usbpower">
-</br>
-Figure 1. System block diagram using USB power supply 
-</br></br>
-
-<img src="Documents/block-diagram-acdcpower.jpg" width="500" alt_text="block-diagram-acdcpower">
-</br>
-Figure 2. System block diagram using 9V-20V DC power supply 
-</br>
-
-## Software Prerequisites
-
-To build the project, you will need to download and install the following software:
-
-- CrossCore Embedded Studio
-  - You will need CrossCore Embedded Studio, version 3.0.0 and above, available from [analog.com/cces](https://www.analog.com/cces). CrossCore Embedded Studio includes a 90-day full-featured trial license. Alternatively, the SC835W SOM provides a license that is not time-limited but restricted to use with the ADSP-SC835 and ICE-1000.
-
-- Make (> 4.3.0)
-  - You will need this if you want to run the headless build workflow.
-
-# Building the example application
-
-### About the example applications
-The [examples](cces/examples) folder includes the SHARC-FX port for the following applications:
- * [DTLN (Dual-signal Transformation LSTM Network) denoiser](cces/examples/denoiser)
- * [CNN genre identification](cces/examples/genre_identification)
- * [DS-CNN keyword spotting](cces/examples/keyword_spotter)
-
-Building the example application is a two-stage process. First, you will need to build the static library archive (`libTFLM.a`). The generated library archive is then linked and built together with the example application project to create the executable file. To illustrate: 
-
-<img src="Documents/build_process.jpg" width="500">
-</br></br>
-
-We will discuss two options to build and run the examples:
-  * [via CCES IDE](#option-1-via-the-cces-ide)
-  * [via Headless Build](#option-2-via-the-headless-build)
-
-### Option 1: via the CCES IDE
-
-Follow the steps below for a graphical-based approach
-
-First, open the project on CCES:
-
-1. Open the project by choosing the *File > Import* in CrossCore Embedded Studio. 
-2. In the *Import* window, select *Existing Projects* into Workspace and click *Next*. 
-3. In the next window, click *Browse* and provide the path to the [examples](cces/examples) directory as the *Select root* directory. 
-4. Select any of the projects and click *Finish*. 
-5. You will see the opened project in the IDE’s Project Explorer.
-
-Next, build the `libTFLM.a` file:
-1. Right click on the opened project and click on *Build Configurations > Set Active*. You may choose either the *Debug* or *Release* for the build configuration.
-2. For the selected configuration:
-  - Click *Project > Clean*. Ensure that only the required project is selected in the *Clean* window. If desired, build the project immediately after cleaning. Configure to start a build immediately only for the selected project and click *OK*. This is an optional, but recommended step.
-  - If the previous step has not already built the project, then click *Project-> Build Project* or press F7.
-  - The binary (*.dxe) will be created in the `Debug` or `Release` folder located in the workspace, depending on the selected configuration. The workspace folder is specified at the top of this section.
-
-At this point, you should have a `libTFLM.a` library archive located inside the `Debug` or `Release` folder.
-
-Instructions to build and run the examples are found in their respective READMEs.
-- [Denoiser](cces/examples/denoiser/README.md)
-- [Keyword Spotting](cces/examples/keyword_spotter/README.md)
-- [Genre Identification](cces/examples/genre_identification/README.md)
-- [Urban Sound Classification](cces/examples/urbansound_classification/README.md)
-
-We have also included utilities for automated model conversion and flashing. These are available in the [Utils](cces/Utils) directory. 
-- [Automated model conversion for DTLN](cces/Utils/automated-model-conversion/dtln/README.md)
-- [Automated model conversion for Genre ID](cces/Utils/automated-model-conversion/genre_identification/README.md)
-- [Flashing](cces/Utils/flashing-tools/README.md)
-
-### Option 2: via the Headless build 
-
-We also provide a CLI-based build workflow that is equivalent to the IDE-based workflow in the CCES ecosystem. The headless interface supports building the `libTFLM.a` library archive.
-
-To build the library archive for TFLM with the optimized kernels, run make on the top-level directory:
+### Headless build and flash
+This project allows headless building.
+The commands are bash commands and need to be run in such commandline tools. Tested the commands using git bash.
+To build TFLM, run the following from this root folder:
 ```
 make
 ```
 
-By default, the build script uses `/c/analog/cces` as the search path for the SHARC-FX toolchains and the default target is for the [ADSP-SC835](https://www.analog.com/en/products/adsp-sc835.html). </br> `RELEASE` is the default configuration but you may also select to `DEBUG` configuration mode.
+Note that the `libadi_sharcfx_nn.a` static library to be built first before building TFLM library or the application.
 
-To configure these, run
-```
-make SHARCFX_ROOT=</path/to/cces> DEVICE=<DEVICE_NAME> CONFIG=<CONFIG_MODE>
-```
-
-The script will output a `./build/libTFLM.a` library which can be linked to other projects using the `-lTFLM` flag. 
-
-Build objects are stored in the `./build` directory. To remove these, run
+To clean the built objects:
 ```
 make clean
 ```
 
-The headless interface also allows building and flashing an example project. To build an example application:
+Steps to build the Optimized TFLM library is available in `adi_sharcfx_nn/README.md`.
+Steps to build and flash the applications are in correcsponding application folder in `cces\examples\<application>`.
+
+The various realtime applications supported:
+- `denoiser dtln`
+- `genre_id`
+- `keyword_spotter`
+- `urban_sound_classification`
+- `denoiser dfn` ⚠️ *See licensing disclaimer below*
+
+> **DFN Licensing Disclaimer:**
+> The Deep Filtering Network (DFN) model is subject to third-party licensing restrictions and
+> **cannot be used in commercial products without prior approval**.
+> If you require a commercially licensed version of the DFN model, please contact the
+> **ADI Eagle-NN team** to request a commercially approved model before use.
+
+#### Building on CCES 3.0.2 and beyond
+To build with CCES > 3.0.2,
+
 ```
-cd examples/<example_project>/<example_realtime|fileio>
-make
+cd adi_sharcfx_nn\Project
+make SHARCFX_ROOT=/c/analog/cces/3.0.2
+cd kws_realtime
+make flash SHARCFX_ROOT=/c/analog/cces/3.0.2
+```
+Build all the library and application code with the same toolchain.
+
+#### Troubleshooting
+
+Incase of the following error:
+1. 
+```
+bash: make: command not found
+```
+Use:
+```
+/c/analog/cces/<cces_version>/make.exe <command>
 ```
 
-To flash to the board with a debugger, run
-```
-make flash
-```
+2. To choose between Release build or Debug build, use
 
-The default debugger is ICE-1000. To configure this with other debugger like the ICE-2000, run
 ```
-make flash DEBUGGER=2000
+make CONFIG=<Release/Debug>
 ```
 
 ### Multi-boot
-Please follow [bootloader_sharcfx](cces/Utils/flashing-tools/bootloader_sharcfx) for multi-stage booting functionality.
+Please follow `cces/Utils/flashing-tools/bootloader_sharcfx` for multi-stage booting functionality.
 
 Please note that the models we use in the example applications are for DEMO purpose only. If a product needs to be created using the same models, commercial license needs to be taken, and the necessary due diligence needs to be handled by the party with the rightful owners.
 
@@ -155,7 +76,3 @@ CC BY 4.0 compliant datasets for Urban Sound Classification and Music Genre Iden
 
 APPENDIX A - THIRD PARTY LICENSES FOR OPEN-SOURCE COMPONENTS ARE DETAILED AT THE LOCATION BELOW:
  * HTTPS://DOWNLOAD.ANALOG.COM/SHARC-FX-TFLM-EDGE-AI-SDK/VERSIONS.HTML [https://download.analog.com/sharc-fx-tflm-edge-ai-sdk/versions.html]
-
-# Getting Help
-
-Please raise a GitHub Issue for support. 

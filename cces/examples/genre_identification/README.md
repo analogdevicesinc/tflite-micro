@@ -3,7 +3,7 @@ This folder contains the SharcFX port of a Genre Identification application.
 Original repo: https://github.com/cetinsamet/music-genre-classification/
 
 ## Details of the model (from the original repo)
-The model is a modified version of VGG16 conv model. The model takes in audio data(in binary format) sampled at 22050Hz as input.
+The model is a modified version of VGG16 conv model. The model takes in audio data(in binary format) sampled at 48KHz as input.
 
 ## Additional details
 |Content|Supported?|
@@ -12,22 +12,20 @@ The model is a modified version of VGG16 conv model. The model takes in audio da
 |FileIO operation |✅|
 |Realtime operation |✅|
 
-## Model file generation
+## Model file
 * Model files in `common/model/int8_genre_ID` is required to build and run the application. Absence of .cc and .h files in this folder will lead to build errors.
-* Follow the steps mentioned in the README file in `cces\Utils\automated-model-conversion\genre_identification` to generate the models for the application. The batch script will download and convert the int8 models and place them in the relevant locations for the project to access it. 
 * This is the first step to run the `genre_id_fileio` or the `genre_id_realtime` project. It needs to be done only once for genre_identification application.
 
 ## Data Input/Output generation
-* This example is intended for mono audio samples of 22050Hz sampling rate. 
+* This example is intended for mono audio samples of 48KHz sampling rate. 
 * Expected input: Requires genre_audio.bin in `genre_id_fileio/src/input` folder. Follow the Readme in `cces\Utils\data\genre_identification` to generate the input file for testing the application.
-* Expected Output: The detected genre for the input sample will be printed on the console at every ~3 seconds. 
+* Expected Output: The detected genre for the input sample will be printed on the console at every ~2.7 seconds. 
 
 ##  Run application in FileIO mode
-* Follow the steps mentioned in the README file in `cces\Utils\automated-model-conversion\genre_identification\` to generate the models for the application. The batch script will download and convert the int8 models and place them in the relevant locations for the project to access it. In our case in "genre-identification\common\model" folder.
 * Open CCES and import the **genre_id_fileio** project into your CCES workspace. 
 * Build and run the **genre_id_fileio** project. Refer to the `ADI_TFLITE_MICRO_SHARCFX_UsersGuide.doc` for more information on how to build and run a project. 
-* By default, the int8 model will be used to run.
-
+* By default, the int8 model will be enabled to run. To use the float32 model instead, the **`DO_QUANTIZED_INFERENCE`** macro in `src\adi_run_genre_id.cpp` needs to be disabled.
+* The audio file present in the `genre_id_fileio/src/input` folder will give output for the genre in sequence "new_age", "folk", "electronic", "classical". Each genre is of 30 seconds, so you will get 11 predictions for new_age, folk, electronic and 10 predictions for classical when you run the `genre_id_fileio` application with the provided `genre_audio.bin`.
 
 ##  Run application in Realtime mode
 
@@ -68,7 +66,7 @@ The model is a modified version of VGG16 conv model. The model takes in audio da
 * Open CCES and import the **genre_id_realtime** project into your CCES workspace. 
 * Running the project will load the application onto the board, given all the connections are made correctly. 
 * Once the application has been sucessfully loaded, an audio wav file can be played on the laptop/PC connected to the ADSPSC8xx and ADSP218xx board and the input can be suppplied by the cable connected to J12. We combine both the stereo inputs and run through the genre_identification. The genre_identification input is played back through both channels of the output device connected to J17.  
-* The ADC and DAC are configured at 48KHz so the module will decimate this to 24KHz before passing through the genre-identification and then interpolate the output to 48KHz before playing back from the DAC. 
+* The ADC and DAC are configured at 48KHz, data is passed via ADC to the genre-identification model and then the output of 48KHz is played back from the DAC. 
 * The genre_identification output will be displayed on the UART serial terminal. 
 * The default model used for running in FP32. You can switch to int16 activations/int8 weights model by enabling the macro 'DO_QUANTIZED_INFERENCE' present in 'src/adi_run_genre_id.cpp'
 * UART REDIRECTION support is added for realtime applications. By default UART REDIRECTION is enabled for realtime application with UART_REDIRECT macro in project settings. 
@@ -80,11 +78,11 @@ To quickstart the genre_id example, this project allows headless building and fl
 The commands are bash commands and need to be run in such commandline tools. Tested the commands using git bash.
 To build, run the following from `genre_id_fileio` or `genre_id_realtime` directory:
 ```
-make
+make SHARCFX_ROOT=<cces_path>
 ```
 To flash the realtime application, the following command can be run from `genre_id_realtime` directory.
 ```
-make flash
+make flash SHARCFX_ROOT=<cces_path>
 ```
 Before flashing, make sure to switch to boot mode 0 (No boot) then reset the board. 
 Verify that the application is running by switching to boot mode 1 (SPI boot) then resetting the board again.

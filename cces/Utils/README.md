@@ -19,6 +19,14 @@ This folder is not a standalone part of the entire project or any application, b
 
 	--> scripts/
 	Contains scripts for converting input and output data into the required format, following the instructions provided in the README files of each example application folder.
+
+	--> scripts/reorder_weights_fc_and_conv1x1.py
+	Reorders FC (Fully Connected) and Conv1x1 layer weights in a TFLite model to a blocked layout
+	optimised for SHARC-FX DSP SIMD kernels. This step is REQUIRED for all INT8 quantized models
+	before generating TFLM C arrays � without it the INT8 kernels will produce incorrect results.
+	Usage:
+	    python reorder_weights_fc_and_conv1x1.py <input.tflite> <output.tflite>
+	The conversion scripts in automated-model-conversion/ run this automatically for INT8 models.
 	
 --> flashing-tools
 	Contains CCES porject and instructions for flashing the pre-built realtime example applications to the sharc-fx board.

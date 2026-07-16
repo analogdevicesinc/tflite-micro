@@ -11,6 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# Portions Copyright (C) 2023 Analog Devices, Inc. All Rights Reserved.
+# Modifications:
+#   - Added alignas(16) and __attribute__((section(".L3.data"), aligned(16)))
+#     to generated array declarations for SHARC-FX memory placement.
+#   - Added .npy (float32) input file support.
+#   - Simplified header include path generation.
+#   - Modified array naming convention to use 'g_no_norm_' prefix.
 # ==============================================================================
 """Library for converting .tflite, .bmp and .wav files to cc arrays."""
 

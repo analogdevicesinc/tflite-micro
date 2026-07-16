@@ -11,6 +11,10 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+Portions Copyright (C) 2023 Analog Devices, Inc. All Rights Reserved.
+Modifications: Integrated adi_sharcfx_* hardware-optimized kernel calls
+for SHARC-FX hardware acceleration.
 ==============================================================================*/
 
 #include "tensorflow/lite/kernels/internal/reference/integer_ops/tanh.h"
@@ -207,12 +211,25 @@ TfLiteStatus TanhEval(TfLiteContext* context, TfLiteNode* node) {
             cycle_t var = 0, cyc=0; //Variables for cycle counting
             START_CYCLE_COUNT (var);
 #endif
-      reference_integer_ops::Tanh(
+#ifdef USE_OPTIMIZED_TANH_INT8
+            RuntimeShape input_shape = tflite::micro::GetTensorShape(input);
+            RuntimeShape output_shape = tflite::micro::GetTensorShape(output);
+            int32_t flat_size = MatchingFlatSize(input_shape, output_shape); //input length
+            adi_sharcfx_tanh_int8(
+                data.input_zero_point,
+                data.input_multiplier,
+                data.input_left_shift,
+                flat_size,
+                tflite::micro::GetTensorData<int8_t>(input),
+                tflite::micro::GetTensorData<int8_t>(output));
+#else
+		reference_integer_ops::Tanh(
           data.input_zero_point, data.input_range_radius, data.input_multiplier,
           data.input_left_shift, tflite::micro::GetTensorShape(input),
           tflite::micro::GetTensorData<int8_t>(input),
           tflite::micro::GetTensorShape(output),
           tflite::micro::GetTensorData<int8_t>(output));
+#endif
 #ifdef DISPLAY_CYCLE_COUNTS
           STOP_CYCLE_COUNT (cyc, var);
           PRINT_INFO("\tNumber of cycles to run Tanh(INT_8) : \t%ld \n", cyc);

@@ -11,6 +11,10 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+Portions Copyright (C) 2023 Analog Devices, Inc. All Rights Reserved.
+Modifications: Integrated adi_sharcfx_* hardware-optimized kernel calls
+for SHARC-FX hardware acceleration.
 ==============================================================================*/
 
 #include "tensorflow/lite/c/common.h"
@@ -23,6 +27,7 @@ limitations under the License.
 #include "tensorflow/lite/micro/kernels/kernel_util.h"
 #include "tensorflow/lite/micro/kernels/mul.h"
 #include "tensorflow/lite/micro/memory_helpers.h"
+#include "adi_sharcfx_nn.h"
 
 namespace tflite {
 
@@ -128,13 +133,28 @@ TfLiteStatus EvalMulQuantizedReference(TfLiteContext* context, TfLiteNode* node,
           tflite::micro::GetTensorShape(output),
           tflite::micro::GetTensorData<int8_t>(output));
     } else {
-      reference_integer_ops::Mul(op_params,
+#ifdef USE_OPTIMIZED_ELEMENTWISE_OPS
+  	  const int flat_size = MatchingElementsSize(tflite::micro::GetTensorShape(input1), tflite::micro::GetTensorShape(input2), tflite::micro::GetTensorShape(output));
+  	  adi_sharcfx_elementwise_mul_int8(	tflite::micro::GetTensorData<int8_t>(input1),
+  			  	  	  	  	  	  	  	tflite::micro::GetTensorData<int8_t>(input2),
+										tflite::micro::GetTensorData<int8_t>(output),
+  	  									flat_size,
+										op_params.output_multiplier,
+										op_params.output_shift,
+										op_params.input1_offset,
+										op_params.input2_offset,
+										op_params.output_offset,
+										op_params.quantized_activation_min,
+										op_params.quantized_activation_max);
+#else
+    	reference_integer_ops::Mul(op_params,
                                  tflite::micro::GetTensorShape(input1),
                                  tflite::micro::GetTensorData<int8_t>(input1),
                                  tflite::micro::GetTensorShape(input2),
                                  tflite::micro::GetTensorData<int8_t>(input2),
                                  tflite::micro::GetTensorShape(output),
                                  tflite::micro::GetTensorData<int8_t>(output));
+#endif
     }
   } else if (input1->type == kTfLiteInt32) {
     if (need_broadcast) {

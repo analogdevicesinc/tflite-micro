@@ -143,13 +143,23 @@ static void SPORTRxCallback(
 				if(RxCallbackCount==1)
 				{
 					int nReadLocation = (pReadPtr) % NUM_HOPS;//circular buffer loopback to beginning
-					memcpy(g_audio_data_input+(nReadLocation)*AUDIO_COUNT,int_SP0ABuffer4,AUDIO_COUNT*sizeof(int));
+					/* pragma no_simd is added because we noticed when memcpy or loop vectorization is enabled then there is memory corruption
+					   and the inference results get corrupted */
+					#pragma no_simd
+					for(int i = 0; i < AUDIO_COUNT; i++){
+						g_audio_data_input[(nReadLocation)*AUDIO_COUNT+i] = int_SP0ABuffer4[i];
+					}
 					pReadPtr++;//updated read buffer location
 				}
 				else if(RxCallbackCount==2)
 				{
 					int nReadLocation = (pReadPtr) % NUM_HOPS;//circular buffer loopback to beginning
-					memcpy(g_audio_data_input+(nReadLocation)*AUDIO_COUNT,int_SP0ABuffer5,AUDIO_COUNT*sizeof(int));
+					/* pragma no_simd is added because we noticed when memcpy or loop vectorization is enabled then there is memory corruption
+					   and the inference results get corrupted */
+					#pragma no_simd
+					for(int i = 0; i < AUDIO_COUNT; i++){
+						g_audio_data_input[(nReadLocation)*AUDIO_COUNT+i] = int_SP0ABuffer5[i];
+					}
 					pReadPtr++;//updated read buffer location
 					RxCallbackCount=0;
 				}
@@ -181,7 +191,12 @@ static void SPORTTxCallback(
 					//ensure there is new data to write
 					if(pWritePtr < pProcessWritePtr) {
 						int nWriteLocation = (pWritePtr) % NUM_HOPS;//circular buffer loopback to beginning
-						memcpy(int_SP0ABuffer1,g_audio_data_output+(nWriteLocation)*AUDIO_COUNT,AUDIO_COUNT*sizeof(int));
+						/* pragma no_simd is added because we noticed when memcpy or loop vectorization is enabled then there is memory corruption
+						   and the inference results get corrupted */
+						#pragma no_simd
+						for(int i = 0; i < AUDIO_COUNT; i++){
+							int_SP0ABuffer1[i] = g_audio_data_output[(nWriteLocation)*AUDIO_COUNT+i];
+						}
 						pWritePtr++;//updated write buffer location
 					}
 				}
@@ -190,10 +205,15 @@ static void SPORTTxCallback(
 					//ensure there is new data to write
 					if(pWritePtr < pProcessWritePtr) {
 						int nWriteLocation = (pWritePtr) % NUM_HOPS;//circular buffer loopback to beginning
-						memcpy(int_SP0ABuffer2,g_audio_data_output+(nWriteLocation)*AUDIO_COUNT,AUDIO_COUNT*sizeof(int));
+						/* pragma no_simd is added because we noticed when memcpy or loop vectorization is enabled then there is memory corruption
+						   and the inference results get corrupted */
+						#pragma no_simd
+						for(int i = 0; i < AUDIO_COUNT; i++){
+							int_SP0ABuffer2[i] = g_audio_data_output[(nWriteLocation)*AUDIO_COUNT+i];
+						}
 						pWritePtr++;//updated write buffer location
-						TxCallbackCount=0;
 					}
+					TxCallbackCount=0;
 				}
         		break;
         default:

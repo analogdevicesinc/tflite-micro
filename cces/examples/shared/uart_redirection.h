@@ -32,9 +32,17 @@ extern "C" {
 #define MHZ           (1000000u)
 #define CLKIN         (25u * MHZ)
 
-// Function declaration
+/* Suggested receive buffer size for UART_READ() */
+#define UART_RX_BUFFER_SIZE     256
+
+/* Function declarations */
 int32_t Init_UART(void);
 int32_t UART_DEBUG_PRINT(int transmit_len);
+
+/* Blocking read: waits until nLength bytes are received.
+ * Pass ADI_OSAL_TIMEOUT_FOREVER to wait indefinitely, or a tick count
+ * for a bounded wait. TX-only apps can simply not call this. */
+int32_t UART_READ(uint8_t *pBuffer, uint32_t nLength, uint32_t nTimeOut);
 
 #ifdef __cplusplus
 }

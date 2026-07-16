@@ -92,7 +92,7 @@ TfLiteTensor* state1 = nullptr;
 TfLiteTensor* state2 = nullptr;
 
 // An area of memory to use for input, output, and intermediate arrays.
-constexpr int kTensorArenaSize = (72 + 10) * 1024;
+constexpr int kTensorArenaSize = (100) * 1024;
 static uint8_t tensor_arena[kTensorArenaSize]__attribute__((section(".L1.data"), aligned(16)));
 
 float g_audio_state1_input[FFT_SIZE];//this retains the state for model 1
@@ -314,7 +314,7 @@ bool adi_dtln_model_run() {
   memcpy(state2->data.f,g_audio_state2_input,FFT_SIZE*sizeof(float));//set input state from previous it
 
 #ifdef DO_CYCLE_COUNTS
-	STOP_CYCLE_COUNT (pre_cyc, pre_var);
+	{ cycle_t tmp_pre = 0; STOP_CYCLE_COUNT(tmp_pre, pre_var); pre_cyc += tmp_pre; }
 	START_CYCLE_COUNT (var);
 #endif
 
@@ -324,7 +324,7 @@ bool adi_dtln_model_run() {
   }
 
 #ifdef DO_CYCLE_COUNTS
-	STOP_CYCLE_COUNT (cyc, var);
+	{ cycle_t tmp_cyc = 0; STOP_CYCLE_COUNT(tmp_cyc, var); cyc += tmp_cyc; }
     START_CYCLE_COUNT (pre_var);
 #endif
 
@@ -360,7 +360,7 @@ bool adi_dtln_model_run() {
   memset(g_previous_frame_out+(FRAME_SIZE-HOP_SIZE),0,(HOP_SIZE)*sizeof(float));
 
 #ifdef DO_CYCLE_COUNTS
-	STOP_CYCLE_COUNT (pre_cyc, pre_var);
+	{ cycle_t tmp_pre = 0; STOP_CYCLE_COUNT(tmp_pre, pre_var); pre_cyc += tmp_pre; }
 #endif
 
 

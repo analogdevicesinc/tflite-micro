@@ -31,7 +31,9 @@ void SoftConfig_EV_SC835_SOM_UART(void);
 ADI_UART_HANDLE  ghUART = NULL;
 
 
-/* Memory required for operating UART in interrupt mode */
+/* Memory required for operating UART.
+ * Bidirectional mode needs ADI_UART_BIDIR_MEMORY_SIZE; TX-only needs UNIDIR.
+ * We allocate the larger size so switching modes only requires a recompile. */
 uint8_t  gUARTMemory[ADI_UART_BIDIR_MEMORY_SIZE];
 
 /* test setup */
@@ -62,15 +64,17 @@ int32_t Init_UART(void)
 	/* setup pinmux and softconfig */
 	test_setup();
 
-	/* Initialize UART */
+	/* Open UART in bidirectional mode (TX + RX).
+	 * Same approach as UARTCoreMode example: ADI_UART_DIR_BIDIRECTION.
+	 * Apps that only need TX can simply never call UART_READ(). */
 	if((eResult = adi_uart_Open(UART_DEVICE_NUM,
-			ADI_UART_DIR_TRANSMIT,
+			ADI_UART_DIR_BIDIRECTION,
 			gUARTMemory,
-			ADI_UART_UNIDIR_MEMORY_SIZE,
+			ADI_UART_BIDIR_MEMORY_SIZE,
 			&ghUART)) != ADI_UART_SUCCESS)
 	{
 		#undef UART_REDIRECT
-		PRINT_INFO("Could not open UART Device 0x%08X \n", eResult); //
+		PRINT_INFO("Could not open UART Device 0x%08X \n", eResult);
 		return FAILED;
 	}
 
@@ -83,6 +87,29 @@ int32_t Init_UART(void)
 
 	return PASSED;
 
+}
+
+/*
+ *   Function:    UART_READ
+ *   Description: Blocking core-mode read of nLength bytes from UART into pBuffer.
+ *                UART must be opened in bidirectional mode (Init_UART does this).
+ *                Pass ADI_OSAL_TIMEOUT_FOREVER to block until all bytes arrive,
+ *                or pass a tick count for a bounded wait.
+ *                TX-only apps can simply ignore this function.
+ */
+int32_t UART_READ(uint8_t *pBuffer, uint32_t nLength, uint32_t nTimeOut)
+{
+	ADI_UART_RESULT eResult = ADI_UART_FAILURE;
+
+	if((eResult = adi_uart_CoreRead(ghUART,
+			pBuffer,
+			nLength,
+			nTimeOut)) != ADI_UART_SUCCESS)
+	{
+		PRINT_INFO("Could not do a UART read 0x%08X \n", eResult);
+		return FAILED;
+	}
+	return PASSED;
 }
 
 /*
