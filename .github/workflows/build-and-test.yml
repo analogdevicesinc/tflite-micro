@@ -92,28 +92,3 @@ jobs:
               exit 1
             fi
           continue-on-error: true
-
-        - name: Store libTFLM test results and build artifact
-          shell: bash
-          env:
-            JF_URL: ${{ secrets.JF_URL }}
-            JF_ACCESS_TOKEN: ${{ secrets.JF_TOKEN }}
-          run:  |
-            BUILD_DATE=$(date +'%Y-%m-%d')
-            if [ "${{ github.event_name }}" = "pull_request" ]; then
-              PR_NUMBER=PR-${{ github.event.pull_request.number }}
-              TARGET_BRANCH=${{ github.event.pull_request.base.ref }}
-              TARGET_BRANCH=${TARGET_BRANCH//\//_}
-              FOLDER_NAME=PRs/${TARGET_BRANCH}/${PR_NUMBER}
-            else
-              BRANCH_NAME=${GITHUB_REF#refs/heads/}
-              FOLDER_NAME="${BRANCH_NAME//\//_}"
-            fi
-            COMMIT_HASH=${GITHUB_SHA::7}
-            UPLOAD_PATH="TFLM/${FOLDER_NAME}/build_${{ github.run_number }}-${BUILD_DATE}-${COMMIT_HASH}/${{ matrix.cces_ver }}"
-            echo "Uploading test results to JF: ${{ env.JF_URL }}/$UPLOAD_PATH"
-            TEST_FILE_PATH="./test/unit_test/test_results.log"
-            curl -u${{ env.JF_ACCESS_TOKEN }} -T ${TEST_FILE_PATH} ${{ env.JF_URL }}/${UPLOAD_PATH}/ > /dev/null
-            BUILD_FILE_PATH="./build/libTFLM.a"
-            echo "Uploading build artifact to JF: ${{ env.JF_URL }}/$UPLOAD_PATH"
-            curl -u${{ env.JF_ACCESS_TOKEN }} -T $BUILD_FILE_PATH ${{ env.JF_URL }}/$UPLOAD_PATH/ > /dev/null
