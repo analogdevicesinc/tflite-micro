@@ -2,7 +2,7 @@
 
 This directory contains instructions for flashing all the application ldr files and the bootloader **.ldr** (loader) file for multi-stage booting. 
 The various applications supported:
-- `denoiser`
+- `denoiser_dtln`
 - `genre_identification`
 - `urbansound_classification`
 - `keyword_spotter`
@@ -116,7 +116,7 @@ C:/analog/cces/3.0.2/cldp \
   -driver C:/analog/cces/3.0.2/ARM/openocd/share/openocd/scripts/board/flash_algorithms/SC83x_flash.dxe \
   -file ./bootloader_sharcfx.ldr
 
-# 🔹 Step 2: Flash the Denoiser app at offset 0x00080000
+# 🔹 Step 2: Flash the Denoiser DTLN app at offset 0x00080000
 C:/analog/cces/3.0.2/cldp \
   -proc ADSP-SC835 \
   -emu 2000 \
@@ -149,7 +149,6 @@ C:/analog/cces/3.0.2/cldp \
   -offset 0x009a7c00 \
   -file ./urbansound_id_realtime.ldr
 
-
 # 🔹 Step 5: Flash the Keyword Spotter (KWS) app at offset 0x00E3BA00
 C:/analog/cces/3.0.2/cldp \
   -proc ADSP-SC835 \
@@ -173,15 +172,25 @@ Once flashing is complete:
 
 When the board boots with the multi-stage loader, the following message is displayed over UART:
 
-Hi it's the Bootloader
-*****************************************
-Press Push Button 1 for Genre ID application 
-Press Push Button 2 for UrbanSound application
-Press Push Button 1 and 2 both for KWS application 
-Incase within 2 seconds no button is pressed Denoiser application will start running 
-Reboot to come to the selection menu again
+```
+Hi its the Bootloader
 
-*****************************************
+ ============================================
+          SHARC-FX Application Bootloader
+ ============================================
+ Press a key to select an application:
+
+   [1]  Denoiser DTLN
+   [2]  Genre Identification
+   [3]  Urban Sound Classification
+   [4]  Keyword Spotter
+
+ --> Auto-booting DTLN Denoiser in 10 seconds...
+ ============================================
+```
+
+If no key is pressed within 10 seconds the **DTLN Denoiser** application boots automatically.
+Reboot the board to return to the selection menu.
 
 ### UART Setup
 * The output can be directed to the UART in the following way:

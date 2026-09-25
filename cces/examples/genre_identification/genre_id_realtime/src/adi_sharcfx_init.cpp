@@ -236,8 +236,8 @@ static void SPORTTxCallback(
 						int_SP0ABuffer1[i] = (int)g_audio_data_input[(nWriteLocation * AUDIO_COUNT)+i];
 					}
 					pWritePtr++;//updated write buffer location
-					TxCallbackCount=0;
 				}
+				TxCallbackCount=0;
 			}
 			break;
         default:

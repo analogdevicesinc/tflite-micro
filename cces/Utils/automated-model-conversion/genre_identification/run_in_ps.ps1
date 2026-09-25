@@ -29,6 +29,9 @@ else
 {
 	if(!(Test-Path -Path $project_folder)){
 		git clone https://github.com/cetinsamet/music-genre-classification.git
+		Remove-Item -Force "$project_folder\test.mp3" -ErrorAction SilentlyContinue
+		Remove-Item -Recurse -Force "$project_folder\model" -ErrorAction SilentlyContinue
+		Copy-Item -Force "changed_scripts\*" "$project_folder\src\"
 	}
 	else{
 		Write-Host "Project directory already present, moving to next step"

@@ -11,6 +11,10 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+
+Portions Copyright (C) 2023 Analog Devices, Inc. All Rights Reserved.
+Modifications: Integrated adi_sharcfx_* hardware-optimized kernel calls
+for SHARC-FX hardware acceleration.
 ==============================================================================*/
 #include "tensorflow/lite/micro/kernels/lstm_eval.h"
 
@@ -162,15 +166,11 @@ void AddElementWise(const float* input_1, const float* input_2, int n_batch,
 }
 
 void Sigmoid(const RuntimeShape& data_shape, int16_t* data) {
-#if defined(USE_OPTIMIZED_LSTM) && (USE_OPTIMIZED_LOGISTIC_INT16)
-    int16_t  * pTempBuf = new int16_t[data_shape.FlatSize()];
+#if defined(USE_OPTIMIZED_LSTM) && defined(USE_OPTIMIZED_LOGISTIC_INT16)
     adi_sharcfx_logistic_int16( 0, 0,
                                 data_shape.FlatSize(),
                                 data,
                                 data);
-    memcpy(data, pTempBuf, data_shape.FlatSize()*sizeof(int16_t));
-    delete[] pTempBuf;
-    pTempBuf=NULL;
 #else
     reference_integer_ops::Logistic(
             0 /*data->input_multiplier*/, 0 /*data->input_left_shift */,
@@ -194,7 +194,7 @@ void Tanh(int32_t cell_state_scale_power, const RuntimeShape& input_data_shape,
         tanh_input_left_shift = -tanh_input_left_shift;
         input_multiplier = 3;
     }
-#if defined(USE_OPTIMIZED_LSTM) && (USE_OPTIMIZED_TANH_INT16)
+#if defined(USE_OPTIMIZED_LSTM) && defined(USE_OPTIMIZED_TANH_INT16)
     int32_t flat_size = MatchingFlatSize(input_data_shape, output_data_shape); //input length
     adi_sharcfx_tanh_int16( input_multiplier/3, tanh_input_left_shift,
                             flat_size,
@@ -219,7 +219,7 @@ void Mul(const RuntimeShape& shape, const ArithmeticParams& params,
         const int16_t* input1_data, const int16_t* input2_data,
         int8_t* output_data) {
 #ifdef USE_OPTIMIZED_LSTM
-    adi_sharcfx_elementwise_mul_int8(   input1_data,
+	adi_sharcfx_elementwise_mul_int16_input_int8_output(   input1_data,
                                         input2_data,
                                         output_data,
                                         shape.FlatSize(),

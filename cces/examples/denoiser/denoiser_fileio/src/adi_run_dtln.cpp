@@ -277,7 +277,7 @@ bool adi_dtln_model_run() {
   memcpy(state2->data.f,g_audio_state2_input,FFT_SIZE*sizeof(float));//set input state from previous it
 
 #ifdef DO_CYCLE_COUNTS
-	STOP_CYCLE_COUNT (pre_cyc, pre_var);
+	{ cycle_t tmp_pre = 0; STOP_CYCLE_COUNT(tmp_pre, pre_var); pre_cyc += tmp_pre; }
 #endif
 
 #ifdef DO_CYCLE_COUNTS
@@ -291,7 +291,7 @@ bool adi_dtln_model_run() {
   }
 
 #ifdef DO_CYCLE_COUNTS
-	STOP_CYCLE_COUNT (cyc, var);
+	{ cycle_t tmp_cyc = 0; STOP_CYCLE_COUNT(tmp_cyc, var); cyc += tmp_cyc; }
 #endif
 
 #ifdef DO_CYCLE_COUNTS
@@ -321,7 +321,7 @@ bool adi_dtln_model_run() {
   memset(g_previous_frame_out+(FRAME_SIZE-HOP_SIZE),0,(HOP_SIZE)*sizeof(float));
 
 #ifdef DO_CYCLE_COUNTS
-	STOP_CYCLE_COUNT (pre_cyc, pre_var);
+	{ cycle_t tmp_pre = 0; STOP_CYCLE_COUNT(tmp_pre, pre_var); pre_cyc += tmp_pre; }
 #endif
 
   //writetofile with overlap

@@ -41,4 +41,5 @@ urllib3==2.2.3
 tensorflow==2.15.0
 keras==2.15.0
 nobuco
+pandas
 

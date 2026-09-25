@@ -34,7 +34,7 @@ to the terms of the associated Analog Devices License Agreement.
 
 #define M_PI 3.141592653589793
 
-//#define DISPLAY_CYCLE_COUNTS
+// #define DISPLAY_CYCLE_COUNTS
 #ifdef DISPLAY_CYCLE_COUNTS   /* Enable the macros */
 #define DO_CYCLE_COUNTS       //Needed internally
 #define __PRE_FX_COMPATIBILITY

@@ -3,21 +3,43 @@ Copyright(c) 2025 Analog Devices, Inc. All Rights Reserved.
 This software is proprietary. By using this software you agree
 to the terms of the associated Analog Devices License Agreement.
 *********************************************************************************/
-/*****************************************************************************
- * main.cpp
- *****************************************************************************/
+/**
+ * @file main.cpp
+ * @brief Application entry point for the DFN denoiser realtime example.
+ *
+ * Initialises all hardware peripherals (power, UART, SPU, GPIO, TWI, codecs,
+ * SPORT) then enters the main processing loop.  Each loop iteration either:
+ *  - Runs one DFN inference hop (adi_denoiser_dfn_run) in denoising mode, or
+ *  - Copies one hop of raw ADC audio directly to the DAC in passthrough mode.
+ *
+ * Push-button SW3 toggles between denoising and passthrough modes at runtime.
+ */
 #include <sys/platform.h>
 #include "adi_initialize.h"
 #include "adi_run_dtln.h"
 #include "adi_sharcfx_init.h"
-bool bPassThrough = false;
 
+bool bPassThrough = false;
+volatile bool bButtonPressed = false;
+
+void gpioCallback(ADI_GPIO_PIN_INTERRUPT ePinInt, uint32_t Data, void *pCBParam)
+{
+	if (ePinInt == PUSH_BUTTON1_PINT)
+	{
+		if (Data & PUSH_BUTTON1_PINT_PIN)
+		{
+			bButtonPressed = true;
+		}
+	}
+}
 
 /*
  * Main function
  */
 int main(int argc, char *argv[])
 {
+
+
 	/**
 	 * Initialize managed drivers and/or services that have been added to
 	 * the project.
@@ -32,8 +54,6 @@ int main(int argc, char *argv[])
 	 * are used
 	 * (For ADSP-21593 - CCLK: 1000 MHz , SYSCLK: 500 MHz) */
 	adi_pwr_Init(CGU_DEV, CLKIN);
-
-	adi_pwr_cfg0_init();
 
 	#ifdef UART_REDIRECT
 		/* Initialize the TWI pin mux for any of the soft config access through TWI1 (SOM board) and TWI2 (EZLITE board) */
@@ -73,12 +93,29 @@ int main(int argc, char *argv[])
 		PRINT_INFO("GPIO Initialization failed \n");
 	}
 
-	/*Configure the Port Pin PC_01 as output for LED blink*/
-	Result = adi_gpio_SetDirection(ADI_GPIO_PORT_C,ADI_GPIO_PIN_1, ADI_GPIO_DIRECTION_OUTPUT);
-	if(Result!= ADI_GPIO_SUCCESS)
+	/* Register GPIO interrupt callback for push button (SW3) */
+	Result = adi_gpio_RegisterCallback(PUSH_BUTTON1_PINT, PUSH_BUTTON1_PINT_PIN, gpioCallback, (void*)0);
+	if(Result != ADI_GPIO_SUCCESS)
+	{
+		PRINT_INFO("GPIO callback registration failed \n");
+	}
+
+	/* Configure PINT for rising edge on SW3 */
+	Result = adi_gpio_PinInt(PUSH_BUTTON1_PIN_ASSIGN, PUSH_BUTTON1_PINT_PIN, PUSH_BUTTON1_PINT,
+	                         PUSH_BUTTON1_PIN_ASSIGN_BYTE, true, ADI_GPIO_SENSE_RISING_EDGE);
+	if(Result != ADI_GPIO_SUCCESS)
+	{
+		PRINT_INFO("GPIO PinInt configuration failed \n");
+	}
+
+	/* Configure Port Pin PC_01 as output for LED blink */
+	Result = adi_gpio_SetDirection(ADI_GPIO_PORT_C, ADI_GPIO_PIN_1, ADI_GPIO_DIRECTION_OUTPUT);
+	if(Result != ADI_GPIO_SUCCESS)
 	{
 		PRINT_INFO("GPIO Initialization failed \n");
 	}
+	//TFLM model setup
+	adi_dtln_model_setup();
 
 	/* SRU Configuration */
 	SRU_Init();
@@ -113,21 +150,19 @@ int main(int argc, char *argv[])
 		Result=Stop_TWI();
 	}
 
-	//TFLM model setup
-	adi_dtln_model_setup();
-
-	uint32_t pinstate = 0;
-	//passthrough mode is disabled initially
-	adi_gpio_Toggle(ADI_GPIO_PORT_C,ADI_GPIO_PIN_1);
-
+	/* Passthrough disabled initially, toggle LED to indicate denoising mode */
+	adi_gpio_Toggle(ADI_GPIO_PORT_C, ADI_GPIO_PIN_1);
+	bPassThrough = false;
+	/* Main processing loop */
 	while(1) {
-		//Poll SW3 state to decide state
-		adi_gpio_GetData(PUSH_BUTTON1_PORT,&pinstate);
-     	if (pinstate & PUSH_BUTTON1_PIN){
-     		//toggle passthrough
-     		bPassThrough = !bPassThrough;
-     		adi_gpio_Toggle(ADI_GPIO_PORT_C,ADI_GPIO_PIN_1);
-     	}
+		/* Check flag set by SW3 interrupt to toggle passthrough/denoising mode */
+		if (bButtonPressed)
+		{
+			bButtonPressed = false;
+			bPassThrough = !bPassThrough;
+			PRINT_INFO(bPassThrough ? "Mode: PASSTHROUGH\n" : "Mode: DENOISING\n");
+			adi_gpio_Toggle(ADI_GPIO_PORT_C, ADI_GPIO_PIN_1);
+		}
 
 		if(bPassThrough == false) {
 			//process next frame through denoiser
@@ -135,30 +170,14 @@ int main(int argc, char *argv[])
 				adi_dtln_model_run();
 			}
 		} else {
-			//
-			//check first if there is new data to write
-			if(pProcessReadPtr < pReadPtr) {
-				//convert int to float
-				int pProcessReadLoc = (pProcessReadPtr) % NUM_HOPS;//circular buffer loopback to beginning
-				//convert int to float using ADC gain
-				float *pFloatPtr = g_process_input;
-				int *pIntPtr = g_audio_data_input+pProcessReadLoc*AUDIO_COUNT;
-				for(int i = 0;i < AUDIO_COUNT;i += 2){
-				   float nNoiseVal = (float)(*pIntPtr++/(float)(SCALE_FACTOR));//24 bit adc = pow(2,24)
-				   float nSignalVal = (float)(*pIntPtr++/(float)(SCALE_FACTOR));//24 bit adc = pow(2,24)
-				   *pFloatPtr++ = nSignalVal + nNoiseVal;
-				}
-				pProcessReadPtr++;//updated process buffer location
-
-				//convert float to int
-				int pProcessWriteLoc = (pProcessReadPtr) % NUM_HOPS;//circular buffer loopback to beginning
-				pFloatPtr = g_process_input;
-				pIntPtr = g_audio_data_output+pProcessWriteLoc*AUDIO_COUNT;
-				for(int i = 0;i < AUDIO_COUNT;i += 2){
-				   int nIntVal = (int)((*pFloatPtr++)*SCALE_FACTOR);//24 bit dac = pow(2,24)
-				  *pIntPtr++ = nIntVal;//set first channel to 0
-				  *pIntPtr++ = nIntVal;
-				}
+			/* Passthrough mode: copy one hop of raw ADC input directly to DAC output */
+			if(pReadPtr > pProcessReadPtr) {
+				int nReadLoc  = (pProcessReadPtr)  % NUM_HOPS;
+				int nWriteLoc = (pProcessWritePtr) % NUM_HOPS;
+				int *pSrc = g_audio_data_input  + nReadLoc  * AUDIO_COUNT;
+				int *pDst = g_audio_data_output + nWriteLoc * AUDIO_COUNT;
+				memcpy(pDst, pSrc, AUDIO_COUNT * sizeof(int));
+				pProcessReadPtr++;
 				pProcessWritePtr++;
 			}
 		}

@@ -149,13 +149,23 @@ static void SPORTRxCallback(
                 if(RxCallbackCount==1)
                 {
                     int nReadLocation = (pReadPtr) % NUM_HOPS;//circular buffer loopback to beginning
-                    memcpy(g_audio_data_input+(nReadLocation)*AUDIO_COUNT,int_SP0ABuffer4,AUDIO_COUNT*sizeof(int));
+                    /* pragma no_simd is added because we noticed when memcpy or loop vectorization is enabled then there is memory corruption
+					   and the inference results get corrupted */
+					#pragma no_simd
+					for(int i = 0; i < AUDIO_COUNT; i++){
+						g_audio_data_input[(nReadLocation)*AUDIO_COUNT+i] = int_SP0ABuffer4[i];
+					}
                     pReadPtr++;//updated read buffer location
                 }
                 else if(RxCallbackCount==2)
                 {
                     int nReadLocation = (pReadPtr) % NUM_HOPS;//circular buffer loopback to beginning
-                    memcpy(g_audio_data_input+(nReadLocation)*AUDIO_COUNT,int_SP0ABuffer5,AUDIO_COUNT*sizeof(int));
+                    /* pragma no_simd is added because we noticed when memcpy or loop vectorization is enabled then there is memory corruption
+					   and the inference results get corrupted */
+					#pragma no_simd
+					for(int i = 0; i < AUDIO_COUNT; i++){
+						g_audio_data_input[(nReadLocation)*AUDIO_COUNT+i] = int_SP0ABuffer5[i];
+					}
                     pReadPtr++;//updated read buffer location
                     RxCallbackCount=0;
                 }
@@ -190,7 +200,8 @@ static void SPORTTxCallback(
                         #pragma no_simd
 						for(int i = 0; i<AUDIO_COUNT; i++){
 							int_SP0ABuffer2[i] = (int)g_audio_data_input[(nWriteLocation * AUDIO_COUNT)+i];
-						}                        pWritePtr++;//updated write buffer location
+						}                        
+                        pWritePtr++;//updated write buffer location
                     }
                 }
                 else if(TxCallbackCount==2)
@@ -205,8 +216,8 @@ static void SPORTTxCallback(
 							int_SP0ABuffer1[i] = (int)g_audio_data_input[(nWriteLocation * AUDIO_COUNT)+i];
 						}
 						pWritePtr++;//updated write buffer location
-                        TxCallbackCount=0;
                     }
+                    TxCallbackCount=0;
                 }
                 break;
         default:

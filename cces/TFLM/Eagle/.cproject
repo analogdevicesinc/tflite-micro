@@ -47,7 +47,7 @@
 							<tool id="xtensa.sharcfx.toolchain.c.compiler.1675779102" name="CrossCore SHARC-FX C Compiler" superClass="xtensa.sharcfx.toolchain.c.compiler">
 								<option defaultValue="true" id="xtensa.base.compiler.option.optimization.enable.1259943527" name="Enable optimization" superClass="xtensa.base.compiler.option.optimization.enable" useByScannerDiscovery="false" valueType="boolean"/>
 								<option defaultValue="xtensa.base.compiler.option.optimization.o3" id="xtensa.base.compiler.option.optimization.481670199" name="Optimization level" superClass="xtensa.base.compiler.option.optimization" useByScannerDiscovery="false" valueType="enumerated"/>
-								<option defaultValue="false" id="xtensa.base.compiler.option.debug.enable.1594573253" name="Enable debug information" superClass="xtensa.base.compiler.option.debug.enable" useByScannerDiscovery="false" valueType="boolean"/>
+								<option defaultValue="false" id="xtensa.base.compiler.option.debug.enable.1594573253" name="Enable debug information" superClass="xtensa.base.compiler.option.debug.enable" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="xtensa.common.option.proc.1502562229" name="-proc" superClass="xtensa.common.option.proc" useByScannerDiscovery="false" value=" ADSP-SC835" valueType="string"/>
 								<option id="xtensa.common.option.sirevision.380545876" name="-si-revision" superClass="xtensa.common.option.sirevision" useByScannerDiscovery="false" value=" 0.0" valueType="string"/>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.preprocessdefs.15277567" name="Preprocessor definitions (-D):" superClass="xtensa.base.compiler.option.preprocessdefs" useByScannerDiscovery="false" valueType="definedSymbols">
@@ -93,12 +93,11 @@
 							<tool id="xtensa.sharcfx.toolchain.cpp.compiler.661472690" name="CrossCore SHARC-FX C++ Compiler" superClass="xtensa.sharcfx.toolchain.cpp.compiler">
 								<option defaultValue="true" id="xtensa.base.compiler.option.optimization.enable.736320410" name="Enable optimization" superClass="xtensa.base.compiler.option.optimization.enable" useByScannerDiscovery="false" valueType="boolean"/>
 								<option defaultValue="xtensa.base.compiler.option.optimization.o3" id="xtensa.base.compiler.option.optimization.2137369263" name="Optimization level" superClass="xtensa.base.compiler.option.optimization" useByScannerDiscovery="false" valueType="enumerated"/>
-								<option defaultValue="false" id="xtensa.base.compiler.option.debug.enable.1307159042" name="Enable debug information" superClass="xtensa.base.compiler.option.debug.enable" useByScannerDiscovery="false" valueType="boolean"/>
+								<option defaultValue="false" id="xtensa.base.compiler.option.debug.enable.1307159042" name="Enable debug information" superClass="xtensa.base.compiler.option.debug.enable" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="xtensa.common.option.proc.132974985" name="-proc" superClass="xtensa.common.option.proc" useByScannerDiscovery="false" value=" ADSP-SC835" valueType="string"/>
 								<option id="xtensa.common.option.sirevision.633593000" name="-si-revision" superClass="xtensa.common.option.sirevision" useByScannerDiscovery="false" value=" 0.0" valueType="string"/>
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="xtensa.base.compiler.option.preprocessdefs.933722399" name="Preprocessor definitions (-D):" superClass="xtensa.base.compiler.option.preprocessdefs" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="CORE1"/>
-									<listOptionValue builtIn="false" value="UART_REDIRECT"/>
 									<listOptionValue builtIn="false" value="NDEBUG"/>
 								</option>
 								<option id="xtensa.common.option.coreid.397099002" name="Specify the core Id (-DCORE[A|B|0-2])" superClass="xtensa.common.option.coreid" useByScannerDiscovery="false" value="1" valueType="string"/>
